@@ -89,7 +89,9 @@ class vector {
 	{
 		if (n > this->max_size())
 		{
-			//length excep
+			// TODO length excep
+			//if (n > this->max_size())
+			//throw std::length_error("vector::reserve");
 		}
 		if (n > this->_capacity)
 		{
@@ -120,6 +122,28 @@ class vector {
 			for (size_type i = 0; i < n; ++i)
 				this->_alloc.construct(&this->_array[i], val);
 			this->_size = n;
+		}
+		return ;
+	}
+	void			push_back(const value_type &val)
+	{
+		if (this->_size + 1 > this->_capacity)
+		{
+			if (this->_capacity == 0)
+				reserve(1);
+			else
+				reserve(this->_capacity * 2);
+		this->_alloc.construct(&this->_array[_size], val);
+		this->_size++;
+		}
+		return ;
+	}
+	void			pop_back(void)
+	{
+		if (this->_size > 1)
+		{
+			this->_alloc.destroy(&this->_array[this->_size - 1]);
+			this->_size--;
 		}
 		return ;
 	}
