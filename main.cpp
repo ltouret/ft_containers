@@ -2,7 +2,7 @@
 // add ifndef protection to file
 
 # include <iostream>
-# include <vector>
+//# include <vector>
 
 template < class T, class Alloc = std::allocator<T> > 
 class vector {
@@ -13,7 +13,7 @@ class vector {
 	typedef const T&										const_reference;
 	typedef T*												pointer;
 	typedef const T*										const_pointer;
-	//typedef random_access_iterator<T>		 				iterator;
+	typedef random_access_iterator<T>		 				iterator;
 	//typedef random_access_iterator<const T> 				const_iterator;
 	//typedef reverse_iterator<const_iterator>				const_reverse_iterator;
 	//typedef reverse_iterator<iterator>					reverse_iterator;
@@ -24,10 +24,11 @@ class vector {
 	size_type				_size;
 	size_type				_capacity;
 	allocator_type			_alloc;
-	pointer 				_array;
+	pointer					_array;
 
+	public:
 	size_type		size() const {return (this->_size);}
-	size_type		max_size() const {return (this->alloc.max_size);}
+	size_type		max_size() const {return (this->_alloc.max_size());}
 	size_type		capacity() const {return (this->_capacity);}
 	bool			empty() const
 	{
@@ -38,12 +39,12 @@ class vector {
 	}
 	reference		operator[] (size_type n)
 	{
-		reference	r = *(this->_array + n);
+		reference	r = this->_array[n];
 		return (r);
 	}
 	const_reference	operator[] (size_type n) const
 	{
-		const_reference	r = *(this->_array + n);
+		const_reference	r = this->_array[n];
 		return (r);
 	}
 	reference		at(size_type n)
@@ -133,29 +134,90 @@ class vector {
 				reserve(1);
 			else
 				reserve(this->_capacity * 2);
+		}
 		this->_alloc.construct(&this->_array[_size], val);
 		this->_size++;
-		}
 		return ;
 	}
 	void			pop_back(void)
 	{
-		if (this->_size > 1)
+		if (this->_size > 0)
 		{
 			this->_alloc.destroy(&this->_array[this->_size - 1]);
 			this->_size--;
 		}
 		return ;
 	}
+	void			clear(void)
+	{
+		// check if this works?
+		while (this->_size > 0)
+			pop_back();
+		return ;
+	}
+	void			swap(vector &x)
+	{
+		value_type	*tmp_array = this->_array;
+		size_type	tmp_capacity = this->_capacity;
+		size_type	tmp_size = this->_size;
+		this->_array = x._array;
+		this->_capacity = x._capacity;
+		this->_size = x._size;
+		x._array = tmp_array;
+		x._capacity = tmp_capacity;
+		x._size = tmp_size;
+		return ;
+	}
+	//TODO assign can work with only push_back...
+	template <class InputIterator>
+	void			assign(InputIterator first, InputIterator last)
+	{
+		// protection is useless cos if last - first < 0 then undefined behavior
+		// what if capacity is 0 and I alloc 0?
+		int	n = last - first;
+		if (n < 0)
+			n = 0;
+		clear();
+		reserve(n);
+		for (; first != last; ++first)
+		{
+			this->_alloc.construct(&this->_array[_size], *first);
+			this->_size++;
+		}
+		return ;
+	}
+	void			assign(size_type n, const value_type& val)
+	{
+		// if n negative? undefined?
+		clear();
+		reserve(n);
+		while (this->_size < n)
+		{
+			this->_alloc.construct(&this->_array[_size], val);
+			this->_size++;
+		}
+		return ;
+	}
+	iterator	erase(iterator position)
+	{
+		return ;
+	}
+	/*
+	iterator	erase(iterator first, iterator last)
+	{
+		return ;
+	}
+	*/
 };
 
 int	main()
 {
-	/*
-	std::vector<float> hey;
+	vector<float> hey;
 	hey.push_back(5.1);
-	(*hey.begin())++;
+	hey.assign(100, 10.1);
+	//hey.pop_back();
+	//std::cout << hey.size() << std::endl;
+	//(*hey.begin())++;
 	std::cout << hey[0] << std::endl;
-	*/
 	return (0);
 }
