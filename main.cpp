@@ -2,222 +2,236 @@
 // add ifndef protection to file
 
 # include <iostream>
+# include "random_access_iterator.hpp"
 //# include <vector>
 
-template < class T, class Alloc = std::allocator<T> > 
-class vector {
-	public:
-	typedef T												value_type;
-	typedef Alloc											allocator_type;
-	typedef T&												reference;
-	typedef const T&										const_reference;
-	typedef T*												pointer;
-	typedef const T*										const_pointer;
-	typedef random_access_iterator<T>		 				iterator;
-	//typedef random_access_iterator<const T> 				const_iterator;
-	//typedef reverse_iterator<const_iterator>				const_reverse_iterator;
-	//typedef reverse_iterator<iterator>					reverse_iterator;
-	typedef std::ptrdiff_t									difference_type;
-	typedef size_t											size_type;
+namespace ft
+{
+	template < class T, class Alloc = std::allocator<T> > 
+	class vector
+	{
+		public:
+		typedef T												value_type;
+		typedef Alloc											allocator_type;
+		typedef T&												reference;
+		typedef const T&										const_reference;
+		typedef T*												pointer;
+		typedef const T*										const_pointer;
+		typedef ft::random_access_iterator<T>		 				iterator;
+		//typedef random_access_iterator<const T> 				const_iterator;
+		//typedef reverse_iterator<const_iterator>				const_reverse_iterator;
+		//typedef reverse_iterator<iterator>					reverse_iterator;
+		typedef std::ptrdiff_t									difference_type;
+		typedef size_t											size_type;
 
-	private:
-	size_type				_size;
-	size_type				_capacity;
-	allocator_type			_alloc;
-	pointer					_array;
+		private:
+		size_type				_size;
+		size_type				_capacity;
+		allocator_type			_alloc;
+		pointer					_array;
 
-	public:
-	size_type		size() const {return (this->_size);}
-	size_type		max_size() const {return (this->_alloc.max_size());}
-	size_type		capacity() const {return (this->_capacity);}
-	bool			empty() const
-	{
-		if (this->_size == 0)
-			return (true);
-		else
-			return (false);
-	}
-	reference		operator[] (size_type n)
-	{
-		reference	r = this->_array[n];
-		return (r);
-	}
-	const_reference	operator[] (size_type n) const
-	{
-		const_reference	r = this->_array[n];
-		return (r);
-	}
-	reference		at(size_type n)
-	{
-		//if (n >= this->_size)
-		//	throw std::out_of_range(out_of_range_msg(n));
-		reference	r = *(this->_array + n);
-		return (r);
-	}
-	const_reference	at(size_type n) const
-	{
-		//if (n >= this->_size)
-		//	throw std::out_of_range(out_of_range_msg(n));
-		const_reference	r = *(this->_array + n);
-		return (r);
-	}
-	reference		front()
-	{
-		reference	r = *(this->_array);
-		return (r);
-	}
-	const_reference	front() const
-	{
-		const_reference	r = *(this->_array);
-		return (r);
-	}
-	reference		back()
-	{
-		reference	r = *(this->_array + this->_size - 1);
-		return (r);
-	}
-	const_reference	back() const
-	{
-		const_reference	r = *(this->_array + this->_size - 1);
-		return (r);
-	}
-	allocator_type	get_allocator() const
-	{
-		allocator_type cpy_allocator(_alloc);
-		return (cpy_allocator);
-	}
-	void			reserve(size_type n)
-	{
-		if (n > this->max_size())
+		public:
+		//~vector(void) {std::cout << "bye\n";}
+		size_type		size() const {return (this->_size);}
+		size_type		max_size() const {return (this->_alloc.max_size());}
+		size_type		capacity() const {return (this->_capacity);}
+		bool			empty() const
 		{
-			// TODO length excep
-			//if (n > this->max_size())
-			//throw std::length_error("vector::reserve");
-		}
-		if (n > this->_capacity)
-		{
-			value_type *new_array = _alloc.allocate(n);
-			for (size_type i = 0; i < this->_size; ++i)
-			{
-				this->_alloc.construct(&new_array[i], this->_array[i]);
-				this->_alloc.destroy(&this->_array[i]);
-			}
-			this->_alloc.deallocate(this->_array, this->_capacity);
-			this->_capacity = n;
-			this->_array = new_array;
-		}
-		return ;
-	}
-	// if i try to resize till max_size what happens?
-	void			resize(size_type n, value_type val = value_type())
-	{
-		if (n < this->_size)
-		{
-			for (size_type i = 0; i < this->_size; ++i)
-				this->_alloc.destroy(&this->_array[i]);
-			this->_size = n;
-		}
-		else
-		{
-			reserve(n);
-			for (size_type i = 0; i < n; ++i)
-				this->_alloc.construct(&this->_array[i], val);
-			this->_size = n;
-		}
-		return ;
-	}
-	void			push_back(const value_type &val)
-	{
-		if (this->_size + 1 > this->_capacity)
-		{
-			if (this->_capacity == 0)
-				reserve(1);
+			if (this->_size == 0)
+				return (true);
 			else
-				reserve(this->_capacity * 2);
+				return (false);
 		}
-		this->_alloc.construct(&this->_array[_size], val);
-		this->_size++;
-		return ;
-	}
-	void			pop_back(void)
-	{
-		if (this->_size > 0)
+		reference		operator[] (size_type n)
 		{
-			this->_alloc.destroy(&this->_array[this->_size - 1]);
-			this->_size--;
+			reference	r = this->_array[n];
+			return (r);
 		}
-		return ;
-	}
-	void			clear(void)
-	{
-		// check if this works?
-		while (this->_size > 0)
-			pop_back();
-		return ;
-	}
-	void			swap(vector &x)
-	{
-		value_type	*tmp_array = this->_array;
-		size_type	tmp_capacity = this->_capacity;
-		size_type	tmp_size = this->_size;
-		this->_array = x._array;
-		this->_capacity = x._capacity;
-		this->_size = x._size;
-		x._array = tmp_array;
-		x._capacity = tmp_capacity;
-		x._size = tmp_size;
-		return ;
-	}
-	//TODO assign can work with only push_back...
-	template <class InputIterator>
-	void			assign(InputIterator first, InputIterator last)
-	{
-		// protection is useless cos if last - first < 0 then undefined behavior
-		// what if capacity is 0 and I alloc 0?
-		int	n = last - first;
-		if (n < 0)
-			n = 0;
-		clear();
-		reserve(n);
-		for (; first != last; ++first)
+		const_reference	operator[] (size_type n) const
 		{
-			this->_alloc.construct(&this->_array[_size], *first);
-			this->_size++;
+			const_reference	r = this->_array[n];
+			return (r);
 		}
-		return ;
-	}
-	void			assign(size_type n, const value_type& val)
-	{
-		// if n negative? undefined?
-		clear();
-		reserve(n);
-		while (this->_size < n)
+		reference		at(size_type n)
 		{
+			//if (n >= this->_size)
+			//	throw std::out_of_range(out_of_range_msg(n));
+			reference	r = *(this->_array + n);
+			return (r);
+		}
+		const_reference	at(size_type n) const
+		{
+			//if (n >= this->_size)
+			//	throw std::out_of_range(out_of_range_msg(n));
+			const_reference	r = *(this->_array + n);
+			return (r);
+		}
+		reference		front()
+		{
+			reference	r = *(this->_array);
+			return (r);
+		}
+		const_reference	front() const
+		{
+			const_reference	r = *(this->_array);
+			return (r);
+		}
+		reference		back()
+		{
+			reference	r = *(this->_array + this->_size - 1);
+			return (r);
+		}
+		const_reference	back() const
+		{
+			const_reference	r = *(this->_array + this->_size - 1);
+			return (r);
+		}
+		allocator_type	get_allocator() const
+		{
+			allocator_type cpy_allocator(_alloc);
+			return (cpy_allocator);
+		}
+		void			reserve(size_type n)
+		{
+			if (n > this->max_size())
+			{
+				// TODO length excep
+				//if (n > this->max_size())
+				//throw std::length_error("vector::reserve");
+			}
+			if (n > this->_capacity)
+			{
+				value_type *new_array = _alloc.allocate(n);
+				for (size_type i = 0; i < this->_size; ++i)
+				{
+					this->_alloc.construct(&new_array[i], this->_array[i]);
+					this->_alloc.destroy(&this->_array[i]);
+				}
+				this->_alloc.deallocate(this->_array, this->_capacity);
+				this->_capacity = n;
+				this->_array = new_array;
+			}
+			return ;
+		}
+		// if i try to resize till max_size what happens?
+		void			resize(size_type n, value_type val = value_type())
+		{
+			if (n < this->_size)
+			{
+				for (size_type i = 0; i < this->_size; ++i)
+					this->_alloc.destroy(&this->_array[i]);
+				this->_size = n;
+			}
+			else
+			{
+				reserve(n);
+				for (size_type i = 0; i < n; ++i)
+					this->_alloc.construct(&this->_array[i], val);
+				this->_size = n;
+			}
+			return ;
+		}
+		void			push_back(const value_type &val)
+		{
+			if (this->_size + 1 > this->_capacity)
+			{
+				if (this->_capacity == 0)
+					reserve(1);
+				else
+					reserve(this->_capacity * 2);
+			}
 			this->_alloc.construct(&this->_array[_size], val);
 			this->_size++;
+			return ;
 		}
-		return ;
-	}
-	iterator	erase(iterator position)
-	{
-		return ;
-	}
-	/*
-	iterator	erase(iterator first, iterator last)
-	{
-		return ;
-	}
-	*/
+		void			pop_back(void)
+		{
+			if (this->_size > 0)
+			{
+				this->_alloc.destroy(&this->_array[this->_size - 1]);
+				this->_size--;
+			}
+			return ;
+		}
+		void			clear(void)
+		{
+			// check if this works?
+			while (this->_size > 0)
+				pop_back();
+			return ;
+		}
+		void			swap(vector &x)
+		{
+			value_type	*tmp_array = this->_array;
+			size_type	tmp_capacity = this->_capacity;
+			size_type	tmp_size = this->_size;
+			this->_array = x._array;
+			this->_capacity = x._capacity;
+			this->_size = x._size;
+			x._array = tmp_array;
+			x._capacity = tmp_capacity;
+			x._size = tmp_size;
+			return ;
+		}
+		//TODO assign can work with only push_back...
+		template <class InputIterator>
+		void			assign(InputIterator first, InputIterator last)
+		{
+			// protection is useless cos if last - first < 0 then undefined behavior
+			// what if capacity is 0 and I alloc 0?
+			int	n = last - first;
+			if (n < 0)
+				n = 0;
+			clear();
+			reserve(n);
+			for (; first != last; ++first)
+			{
+				this->_alloc.construct(&this->_array[_size], *first);
+				this->_size++;
+			}
+			return ;
+		}
+		void			assign(size_type n, const value_type& val)
+		{
+			// if n negative? undefined?
+			clear();
+			reserve(n);
+			while (this->_size < n)
+			{
+				this->_alloc.construct(&this->_array[_size], val);
+				this->_size++;
+			}
+			return ;
+		}
+		/*
+		iterator	erase(iterator position)
+		{
+			return ;
+		}
+		iterator	erase(iterator first, iterator last)
+		{
+			return ;
+		}
+		*/
+	};
 };
 
 int	main()
 {
-	vector<float> hey;
+	ft::vector<float> hey;
+	float dis[5];
+	dis[0] = 1.3;
+	dis[1] = 1.3;
+	dis[2] = 1.3;
+	dis[3] = 1.3;
 	hey.push_back(5.1);
 	hey.assign(100, 10.1);
-	//hey.pop_back();
+	hey.pop_back();
 	//std::cout << hey.size() << std::endl;
 	//(*hey.begin())++;
+	ft::random_access_iterator<float> hy(dis);
+	//std::cout << hy;
 	std::cout << hey[0] << std::endl;
+	std::cout << (dis[0] += 2) << std::endl;
 	return (0);
 }
