@@ -31,11 +31,15 @@ namespace ft
 		pointer					_array;
 
 		public:
+		// constructor - destructor
 		//~vector(void) {std::cout << "bye\n";}
-		size_type		size() const {return (this->_size);}
-		size_type		max_size() const {return (this->_alloc.max_size());}
-		size_type		capacity() const {return (this->_capacity);}
-		bool			empty() const
+
+		// iterators
+		iterator		begin(void) const {;}
+		size_type		size(void) const {return (this->_size);}
+		size_type		max_size(void) const {return (this->_alloc.max_size());}
+		size_type		capacity(void) const {return (this->_capacity);}
+		bool			empty(void) const
 		{
 			if (this->_size == 0)
 				return (true);
@@ -220,18 +224,21 @@ int	main()
 {
 	ft::vector<float> hey;
 	float dis[5];
-	dis[0] = 1.3;
-	dis[1] = 1.3;
+	dis[0] = 1.1;
+	dis[1] = 1.2;
 	dis[2] = 1.3;
-	dis[3] = 1.3;
+	dis[3] = 1.4;
 	hey.push_back(5.1);
 	hey.assign(100, 10.1);
 	hey.pop_back();
 	//std::cout << hey.size() << std::endl;
 	//(*hey.begin())++;
-	ft::random_access_iterator<float> hy(dis);
+	ft::random_access_iterator<float> hy(&dis[0]);
+	//hy++;
+	std::cout << *(hy + 1) << std::endl; 
+	std::cout << *(1 + hy) << std::endl; 
 	//std::cout << hy;
-	std::cout << hey[0] << std::endl;
-	std::cout << (dis[0] += 2) << std::endl;
+	std::cout << *hy << std::endl;
+	std::cout << (dis[0] -= -2) << std::endl;
 	return (0);
 }
