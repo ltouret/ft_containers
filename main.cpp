@@ -36,8 +36,8 @@ namespace ft
 		//~vector(void) {std::cout << "bye\n";}
 
 		// iterators
-		iterator		begin(void) {std::cout << "begin\n"; return iterator(&this->_array[0]);}
-		const_iterator	begin(void) const {std::cout << "const begin" << std::endl; return const_iterator(&this->_array[0]);}
+		iterator		begin(void) {return iterator(&this->_array[0]);}
+		const_iterator	begin(void) const {return const_iterator(&this->_array[0]);}
 		iterator		end(void) {return iterator(&this->_array[_size]);}
 		const_iterator	end(void) const {return const_iterator(&this->_array[_size]);}
 

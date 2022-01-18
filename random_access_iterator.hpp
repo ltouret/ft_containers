@@ -8,17 +8,16 @@ namespace ft
 	class random_access_iterator
 	{
 		public:
-		//typedef random_access_iterator<T>						iterator;
-		typedef random_access_iterator<const T> 				if_const;
-		typedef T				value_type;
-		typedef T&				reference;
-		typedef T*				pointer;
-		typedef std::ptrdiff_t	difference_type;
-		pointer					_ptr; // TODO send this to protected
+		typedef random_access_iterator<T>						iterator;
+		typedef random_access_iterator<const T> 				const_iterator;
+		typedef T												value_type;
+		typedef T&												reference;
+		typedef T*												pointer;
+		typedef std::ptrdiff_t									difference_type;
+		pointer													_ptr; // TODO send this to protected
 
 		random_access_iterator(void): _ptr(NULL) {}
 		random_access_iterator(pointer ptr): _ptr(ptr) {}
-		//const_iterator(pointer ptr) : _ptr(ptr) {}
 		random_access_iterator(const random_access_iterator &to_cpy) : _ptr(to_cpy._ptr) {}
 		random_access_iterator	&operator=(const random_access_iterator &to_cpy)
 		{
@@ -27,8 +26,7 @@ namespace ft
 		}
 		~random_access_iterator(void) {}
 
-		//TODO ask Franco wtf this shit does
-		operator if_const() const { std::cout << "YO\n"; return if_const(_ptr); }
+		operator const_iterator(void) const {return const_iterator(_ptr);}
 
 		bool					operator==(const random_access_iterator &to_cmp) {return (this->_ptr == to_cmp._ptr);}
 		bool					operator!=(const random_access_iterator &to_cmp) {return (this->_ptr != to_cmp._ptr);}

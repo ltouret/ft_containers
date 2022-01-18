@@ -6,8 +6,8 @@ Member functions
 operator=
 
 Iterators:
-	begin
-	end
+	#begin
+	#end
 	rbegin
 	rend
 
