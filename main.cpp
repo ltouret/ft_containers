@@ -3,7 +3,7 @@
 
 # include <iostream>
 # include "random_access_iterator.hpp"
-//# include <vector>
+# include <vector>
 
 namespace ft
 {
@@ -17,10 +17,10 @@ namespace ft
 		typedef const T&										const_reference;
 		typedef T*												pointer;
 		typedef const T*										const_pointer;
-		typedef ft::random_access_iterator<T>		 				iterator;
-		//typedef random_access_iterator<const T> 				const_iterator;
-		//typedef reverse_iterator<const_iterator>				const_reverse_iterator;
+		typedef ft::random_access_iterator<T>					iterator;
+		typedef ft::random_access_iterator<const T>				const_iterator;
 		//typedef reverse_iterator<iterator>					reverse_iterator;
+		//typedef reverse_iterator<const_iterator>				const_reverse_iterator;
 		typedef std::ptrdiff_t									difference_type;
 		typedef size_t											size_type;
 
@@ -32,10 +32,15 @@ namespace ft
 
 		public:
 		// constructor - destructor
+		explicit vector (const allocator_type& alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL) {}
 		//~vector(void) {std::cout << "bye\n";}
 
 		// iterators
-		iterator		begin(void) const {;}
+		iterator		begin(void) {std::cout << "begin\n"; return iterator(&this->_array[0]);}
+		const_iterator	begin(void) const {std::cout << "const begin" << std::endl; return const_iterator(&this->_array[0]);}
+		iterator		end(void) {return iterator(&this->_array[_size]);}
+		const_iterator	end(void) const {return const_iterator(&this->_array[_size]);}
+
 		size_type		size(void) const {return (this->_size);}
 		size_type		max_size(void) const {return (this->_alloc.max_size());}
 		size_type		capacity(void) const {return (this->_capacity);}
@@ -240,5 +245,19 @@ int	main()
 	//std::cout << hy;
 	std::cout << *hy << std::endl;
 	std::cout << (dis[0] -= -2) << std::endl;
+	ft::vector<float> dev;
+	ft::vector<float>::iterator itr(&dev[0]);
+	itr = dev.begin();
+	std::cout << *hy << std::endl;
+	const ft::vector<float> dav;
+	const ft::vector<float>::const_iterator itra = dav.begin();//(&dev[0]);
+	//const std::vector<float> lolo;
+	//const std::vector<float>::const_iterator lol = lolo.begin();
+	ft::vector<int> vec;
+	ft::vector<int>::const_iterator itc = vec.begin();
+	std::vector<float> lolo;
+	std::vector<float>::const_iterator lol = lolo.begin();
+	(void) lol;
+	//std::cout << *itr << std::endl;
 	return (0);
 }
