@@ -1,6 +1,7 @@
 # include "iterator_traits.hpp"
 
 // TODO add const
+// change random_access_iterator for iterator in all except constructor destructor
 
 namespace ft
 {
