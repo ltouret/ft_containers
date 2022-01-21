@@ -2,6 +2,7 @@
 
 // TODO add const
 // change random_access_iterator for iterator in all except constructor destructor
+// update to difference_type from int
 
 namespace ft
 {
@@ -15,6 +16,7 @@ namespace ft
 		typedef T&												reference;
 		typedef T*												pointer;
 		typedef std::ptrdiff_t									difference_type;
+		typedef std::random_access_iterator_tag					iterator_category;
 		pointer													_ptr; // TODO send this to protected
 
 		random_access_iterator(void): _ptr(NULL) {}

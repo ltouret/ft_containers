@@ -1,4 +1,5 @@
 // TODO get this into its own file (vector)
+// fix tabs!
 // add ifndef protection to file
 
 # include <iostream>
@@ -41,6 +42,10 @@ namespace ft
 		const_iterator	begin(void) const {return const_iterator(&this->_array[0]);}
 		iterator		end(void) {return iterator(&this->_array[_size]);}
 		const_iterator	end(void) const {return const_iterator(&this->_array[_size]);}
+		reverse_iterator	rbegin(void) {return reverse_iterator(end());}
+		const_reverse_iterator	rbegin(void) const {return const_reverse_iterator(end());}
+		reverse_iterator	rend(void) {return reverse_iterator(begin());}
+		const_reverse_iterator	rend(void) const {return const_reverse_iterator(begin());}
 
 		size_type		size(void) const {return (this->_size);}
 		size_type		max_size(void) const {return (this->_alloc.max_size());}
@@ -255,7 +260,26 @@ int	main()
 	//const std::vector<float> lolo;
 	//const std::vector<float>::const_iterator lol = lolo.begin();
 	ft::vector<int> vec;
+	vec.push_back(0);
+	vec.push_back(1);
+	vec.push_back(2);
 	ft::vector<int>::const_iterator itc = vec.begin();
+	ft::vector<int>::const_reverse_iterator itz = vec.rbegin();
+	{
+	std::cout << "test reverse" << std::endl;
+	std::cout << *itz << std::endl;
+	itz += 1;
+	std::cout << *itz << std::endl;
+	itz -= 1;
+	std::cout << *itz << std::endl;
+	std::cout << "test reverse" << std::endl;
+	}
+	//itc++;
+	std::cout << *itc << std::endl;
+	std::cout << *itz << std::endl;
+	std::cout << (vec.rend() <= vec.rbegin()) << std::endl;
+	std::cout << *(1 + vec.rbegin()) << std::endl;
+	std::cout << *(vec.rend() - 1) << std::endl;
 	std::vector<float> lolo;
 	lolo.push_back(1.3);
 	lolo.push_back(1.2);
