@@ -1,5 +1,9 @@
 # TODO vector
+Add protection of includes!
 Member functions
+
+# Check this link, talks about diff between const iterators / const vector
+http://www.cplusplus.com/forum/general/115538/
 
 (constructor)
 (destructor)

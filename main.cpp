@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include "random_access_iterator.hpp"
+# include "reverse_iterator.hpp"
 # include <vector>
 
 namespace ft
@@ -19,8 +20,8 @@ namespace ft
 		typedef const T*										const_pointer;
 		typedef ft::random_access_iterator<T>					iterator;
 		typedef ft::random_access_iterator<const T>				const_iterator;
-		//typedef reverse_iterator<iterator>					reverse_iterator;
-		//typedef reverse_iterator<const_iterator>				const_reverse_iterator;
+		typedef ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 		typedef std::ptrdiff_t									difference_type;
 		typedef size_t											size_type;
 
@@ -256,7 +257,11 @@ int	main()
 	ft::vector<int> vec;
 	ft::vector<int>::const_iterator itc = vec.begin();
 	std::vector<float> lolo;
-	std::vector<float>::const_iterator lol = lolo.begin();
+	lolo.push_back(1.3);
+	lolo.push_back(1.2);
+	std::vector<float>::iterator lol = lolo.begin();
+	std::cout << &*lolo.begin() << " " << &*lolo.rend() << std::endl;
+	std::cout << lolo.rend () - lolo.rbegin() << std::endl;
 	(void) lol;
 	//std::cout << *itr << std::endl;
 	return (0);
