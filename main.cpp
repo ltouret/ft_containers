@@ -248,29 +248,65 @@ namespace ft
 		}
 		iterator	insert(iterator position, const value_type &val)
 		{
-			(void) val;
-			iterator	tmp;
+			reverse_iterator	tmp;
+			reverse_iterator	rpos(position);
 
 			if (this->_size + 1 > this->_capacity)
-				reserve(this->_capacity * 2);
-			tmp = position;
-			std::cout << *tmp <<" " << &*tmp << std::endl;
-			while (tmp != this->end())
 			{
-				this->_alloc.construct(&*(tmp + 1), (*tmp));
+				if (this->_capacity == 0)
+					reserve(1);
+				else
+					reserve(this->_capacity * 2);
+			}
+			tmp = this->rbegin();
+			while (tmp != rpos)
+			{
+				this->_alloc.construct(&*(tmp - 1), (*tmp));
 				this->_alloc.destroy(&*(tmp));
 				tmp++;
 			}
-			*position = val;
-			tmp = this->begin();
-			std::cout << "check\n";
-			while (tmp != this->end())
-			{
-				std::cout << *tmp << std::endl;
-				tmp++;
-			}
-			std::cout << "check\n";
+			this->_alloc.construct(&*(position), (val));
+			this->_size++;
 			return (position);
+		}
+		void	insert(iterator position, size_type n, const value_type &val)
+		{
+			if (this->_size + n > this->_capacity)
+			{
+				if (this->_capacity == 0)
+					reserve(n);
+				else
+				{
+					if (this->_size * 2 >= this->size + n)
+						reserve(this->_size * 2);
+					else
+						reserve(this->_size + n);
+				}
+			}
+			for (size_type	i = 0; i < n; i++)
+				insert(position, val);
+			return ;
+		}
+		// add enable if stuffssss
+		template <class InputIterator>
+		void	insert(iterator position, InputIterator first, InputIterator last)
+		{
+			size_type	n = last - first;
+			if (this->_size + n > this->_capacity)
+			{
+				if (this->_capacity == 0)
+					reserve(n);
+				else
+				{
+					if (this->_size * 2 >= this->size + n)
+						reserve(this->_size * 2);
+					else
+						reserve(this->_size + n);
+				}
+			}
+			for (; first != last; first++)
+				insert(position, *first);
+			return ;
 		}
 	};
 };
@@ -313,8 +349,34 @@ int	main()
 		std::cout << vec[0] << std::endl;
 		//std::cout <<  &*(vec.begin() + 1) << std::endl;
 		it = vec.insert(vec.begin() + 1, 1);
-		std::cout << *it << std::endl;
 		std::cout << vec[2] << std::endl;
+		{
+			std::cout << "check\n";
+			std::cout << *it << std::endl;
+			ft::vector<int>::iterator	tmp = vec.begin();
+			while (tmp != vec.end())
+			{
+				std::cout << *tmp << std::endl;
+				tmp++;
+			}
+			std::cout << "check\n";
+		}
+		{
+			std::cout << "check\n";
+			std::vector<int> vec;
+			vec.push_back(0);
+			vec.push_back(2);
+			vec.push_back(3);
+			std::vector<int>::iterator it = vec.insert(vec.begin() + 1, 1);
+			std::cout << *it << std::endl;
+			std::vector<int>::iterator	tmp = vec.begin();
+			while (tmp != vec.end())
+			{
+				std::cout << *tmp << std::endl;
+				tmp++;
+			}
+			std::cout << "check\n";
+		}
 	}
 	{
 		std::cout << "test erase" << std::endl;

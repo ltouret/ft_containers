@@ -1,5 +1,7 @@
 # TODO vector
+Add enable_if and stuffs
 Add protection of includes!
+
 Member functions
 
 # Check this link, talks about diff between const iterators / const vector
@@ -33,7 +35,7 @@ Modifiers:
 	#assign
 	#push_back
 	#pop_back
-	insert
+	#insert
 	#erase
 	#swap
 	#clear
