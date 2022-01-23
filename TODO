@@ -34,7 +34,7 @@ Modifiers:
 	#push_back
 	#pop_back
 	insert
-	erase
+	#erase
 	#swap
 	#clear
 

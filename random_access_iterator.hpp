@@ -17,7 +17,6 @@ namespace ft
 		typedef T*												pointer;
 		typedef std::ptrdiff_t									difference_type;
 		typedef std::random_access_iterator_tag					iterator_category;
-		pointer													_ptr; // TODO send this to protected
 
 		random_access_iterator(void): _ptr(NULL) {}
 		random_access_iterator(pointer ptr): _ptr(ptr) {}
@@ -116,5 +115,8 @@ namespace ft
 		{
 			return (this->_ptr[n]);
 		}
+
+		protected:
+		pointer													_ptr; // TODO send this to protected
 	};
 };

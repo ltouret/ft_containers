@@ -218,16 +218,60 @@ namespace ft
 			}
 			return ;
 		}
-		/*
-		iterator	erase(iterator position)
+		iterator	erase(iterator pos)
 		{
+			this->erase(pos, ++pos);
 			return ;
 		}
 		iterator	erase(iterator first, iterator last)
 		{
-			return ;
+			iterator	tmp;
+
+			if (first == last)
+				return (last); //first?
+			tmp = first;
+			this->_size -= last- first;
+			while (tmp != last)
+			{
+				this->_alloc.destroy(&*(tmp));
+				tmp++;
+			}
+			tmp = first;
+			while (tmp != this->end())
+			{
+				this->_alloc.construct(&*(tmp), *(last));
+				this->_alloc.destroy(&*(last));
+				tmp++;
+				last++;
+			}
+			return (first);
 		}
-		*/
+		iterator	insert(iterator position, const value_type &val)
+		{
+			(void) val;
+			iterator	tmp;
+
+			if (this->_size + 1 > this->_capacity)
+				reserve(this->_capacity * 2);
+			tmp = position;
+			std::cout << *tmp <<" " << &*tmp << std::endl;
+			while (tmp != this->end())
+			{
+				this->_alloc.construct(&*(tmp + 1), (*tmp));
+				this->_alloc.destroy(&*(tmp));
+				tmp++;
+			}
+			*position = val;
+			tmp = this->begin();
+			std::cout << "check\n";
+			while (tmp != this->end())
+			{
+				std::cout << *tmp << std::endl;
+				tmp++;
+			}
+			std::cout << "check\n";
+			return (position);
+		}
 	};
 };
 
@@ -259,6 +303,34 @@ int	main()
 	const ft::vector<float>::const_iterator itra = dav.begin();//(&dev[0]);
 	//const std::vector<float> lolo;
 	//const std::vector<float>::const_iterator lol = lolo.begin();
+	{
+		std::cout << "test insert" << std::endl;
+		ft::vector<int>	vec;
+		ft::vector<int>::iterator it;
+		vec.push_back(0);
+		vec.push_back(2);
+		vec.push_back(3);
+		std::cout << vec[0] << std::endl;
+		//std::cout <<  &*(vec.begin() + 1) << std::endl;
+		it = vec.insert(vec.begin() + 1, 1);
+		std::cout << *it << std::endl;
+		std::cout << vec[2] << std::endl;
+	}
+	{
+		std::cout << "test erase" << std::endl;
+		ft::vector<int>	vec;
+		ft::vector<int>::iterator it;
+		vec.push_back(0);
+		vec.push_back(1);
+		vec.push_back(2);
+		std::cout << vec[0] << std::endl;
+		ft::vector<int>::iterator ite = vec.begin();
+		std::cout << &*vec.begin() <<" yo " << &*ite << std::endl;
+		it = vec.erase(ite, ite + 1);
+		std::cout << "yo " << *ite << std::endl;
+		std::cout << *it << std::endl;
+		std::cout << vec[0] << std::endl;
+	}
 	ft::vector<int> vec;
 	vec.push_back(0);
 	vec.push_back(1);
