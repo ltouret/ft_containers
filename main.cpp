@@ -344,19 +344,30 @@ namespace ft
 			return ;
 		}
 	};
+	template <class T, class Alloc>
+	void	swap(vector<T,Alloc> &x, vector<T,Alloc> &y) {x.swap(y);}
 };
 
 int	main()
 {
 	{
+		std::cout << "test swap & =" << std::endl;
 		ft::vector<int> vec;
 		ft::vector<int> vec1;
-		vec.push_back(1);
-		vec.push_back(2);
-		vec.push_back(3);
-		std::cout << vec[0] << std::endl;
-		vec1 = vec;
-		std::cout << vec1[0] << std::endl;
+		vec.push_back(5);
+		vec.push_back(5);
+		vec.push_back(5);
+		vec1.push_back(3);
+		vec1.push_back(3);
+
+		//vec1.swap(vec);
+		//swap(vec1, vec);
+		//vec1 = vec;
+
+		for (ft::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it)
+			std::cout << *it << std::endl;
+		for (ft::vector<int>::iterator it = vec1.begin(); it != vec1.end(); ++it)
+			std::cout << *it << std::endl;
 		//return 0;
 	}
 	ft::vector<float> hey;

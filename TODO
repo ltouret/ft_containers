@@ -2,6 +2,7 @@
 Add enable_if and stuffs
 Add protection of includes!
 Change in random access iterator the int for difference_type
+Check TODO's in every file!
 
 Member functions
 
@@ -46,4 +47,4 @@ http://www.cplusplus.com/forum/general/115538/
 
 Non-member function overloads
 	relational operators
-	swap
+	#swap
