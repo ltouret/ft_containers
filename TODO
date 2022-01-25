@@ -12,13 +12,13 @@ http://www.cplusplus.com/forum/general/115538/
 #(destructor)
 #operator=
 
-Iterators:
+#Iterators:
 	#begin
 	#end
 	#rbegin
 	#rend
 
-Capacity:
+#Capacity:
 	#size
 	#max_size
 	#resize
@@ -32,7 +32,7 @@ Capacity:
 	#front
 	#back
 
-Modifiers:
+#Modifiers:
 	#assign
 	#push_back
 	#pop_back

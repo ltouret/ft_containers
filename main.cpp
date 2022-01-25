@@ -61,6 +61,13 @@ namespace ft
 			this->_alloc.deallocate(this->_array, this->_capacity);
 			return ;
 		}
+		vector	&operator=(const vector &x)
+		// TODO check more of dis
+		{
+			vector	tmp(x);
+			this->swap(tmp);
+			return (*this);
+		}
 
 		// iterators
 		iterator		begin(void) {return iterator(&this->_array[0]);}
@@ -141,7 +148,7 @@ namespace ft
 			}
 			if (n > this->_capacity)
 			{
-				std::cout << n << " " << _capacity << std::endl;
+				//std::cout << n << " " << _capacity << std::endl;
 				value_type *new_array = _alloc.allocate(n);
 				for (size_type i = 0; i < this->_size; ++i)
 				{
@@ -202,6 +209,7 @@ namespace ft
 			return ;
 		}
 		void			swap(vector &x)
+		// TODO change _alloc?
 		{
 			value_type	*tmp_array = this->_array;
 			size_type	tmp_capacity = this->_capacity;
@@ -225,7 +233,7 @@ namespace ft
 				n = 0;
 			clear();
 			reserve(n);
-			std::cout << n << " " << this->_capacity << std::endl;
+			//std::cout << n << " " << this->_capacity << std::endl;
 			for (; first != last; ++first)
 			{
 				this->_alloc.construct(&this->_array[_size], *first);
@@ -340,6 +348,17 @@ namespace ft
 
 int	main()
 {
+	{
+		ft::vector<int> vec;
+		ft::vector<int> vec1;
+		vec.push_back(1);
+		vec.push_back(2);
+		vec.push_back(3);
+		std::cout << vec[0] << std::endl;
+		vec1 = vec;
+		std::cout << vec1[0] << std::endl;
+		//return 0;
+	}
 	ft::vector<float> hey;
 	float dis[5];
 	dis[0] = 1.1;
