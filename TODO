@@ -1,15 +1,16 @@
 # TODO vector
 Add enable_if and stuffs
 Add protection of includes!
+Change in random access iterator the int for difference_type
 
 Member functions
 
 # Check this link, talks about diff between const iterators / const vector
 http://www.cplusplus.com/forum/general/115538/
 
-(constructor)
-(destructor)
-operator=
+#(constructor)
+#(destructor)
+#operator=
 
 Iterators:
 	#begin

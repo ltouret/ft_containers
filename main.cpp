@@ -34,8 +34,33 @@ namespace ft
 
 		public:
 		// constructor - destructor
-		explicit vector (const allocator_type& alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL) {}
-		//~vector(void) {std::cout << "bye\n";}
+		explicit vector (const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL) {}
+		explicit vector (size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _size(n), _capacity(n), _alloc(alloc), _array(NULL)
+		{
+			this->_array = this->_alloc.allocate(n);
+			for (size_type i = 0; i < n; i++)
+				this->_alloc.construct(&this->_array[i], val);
+			return ;
+		}
+		template <class InputIterator>
+		vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL)
+		{
+			this->assign(first, last);
+			return ;
+		}
+		vector (const vector &x) : _size(x._size), _capacity(x._capacity), _alloc(x._alloc), _array(NULL)
+		{
+			this->_array = this->_alloc.allocate(x._size);
+			for (size_type i = 0; i < this->_size; i++)
+				this->_alloc.construct(&this->_array[i], x._array[i]);
+			return ;
+		}
+		~vector(void)
+		{
+			this->clear();
+			this->_alloc.deallocate(this->_array, this->_capacity);
+			return ;
+		}
 
 		// iterators
 		iterator		begin(void) {return iterator(&this->_array[0]);}
@@ -116,6 +141,7 @@ namespace ft
 			}
 			if (n > this->_capacity)
 			{
+				std::cout << n << " " << _capacity << std::endl;
 				value_type *new_array = _alloc.allocate(n);
 				for (size_type i = 0; i < this->_size; ++i)
 				{
@@ -199,6 +225,7 @@ namespace ft
 				n = 0;
 			clear();
 			reserve(n);
+			std::cout << n << " " << this->_capacity << std::endl;
 			for (; first != last; ++first)
 			{
 				this->_alloc.construct(&this->_array[_size], *first);
@@ -339,6 +366,21 @@ int	main()
 	const ft::vector<float>::const_iterator itra = dav.begin();//(&dev[0]);
 	//const std::vector<float> lolo;
 	//const std::vector<float>::const_iterator lol = lolo.begin();
+	{
+		std::cout << "test constructor" << std::endl;
+		// why the fuck is this broken?
+		//ft::vector<int> vec(5, 10);
+		ft::vector<int> vec;
+		vec.push_back(1);
+		vec.push_back(2);
+		vec.push_back(3);
+		vec.push_back(4);
+		ft::vector<int> vec1(vec);
+		std::cout << vec1[0] << std::endl;
+		vec1[0] = 2;
+		std::cout << vec1[0] << std::endl;
+		std::cout << vec[0] << std::endl;
+	}
 	{
 		std::cout << "test insert" << std::endl;
 		ft::vector<int>	vec;
