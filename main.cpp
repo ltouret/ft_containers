@@ -347,6 +347,7 @@ namespace ft
 	template <class T, class Alloc>
 	void	swap(vector<T,Alloc> &x, vector<T,Alloc> &y) {x.swap(y);}
 
+	//TODO add ft:equal, ft::lexicographical_compare instead of coding new stuff here
 	template <class T, class Alloc>
 	bool	operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
