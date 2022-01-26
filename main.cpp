@@ -35,8 +35,8 @@ namespace ft
 
 		public:
 		// constructor - destructor
-		explicit vector (const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL) {}
-		explicit vector (size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _size(n), _capacity(n), _alloc(alloc), _array(NULL)
+		explicit vector(const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL) {}
+		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _size(n), _capacity(n), _alloc(alloc), _array(NULL)
 		{
 			this->_array = this->_alloc.allocate(n);
 			for (size_type i = 0; i < n; i++)
@@ -44,12 +44,12 @@ namespace ft
 			return ;
 		}
 		template <class InputIterator>
-		vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL)
+		vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type* = 0) : _size(0), _capacity(0), _alloc(alloc), _array(NULL)
 		{
 			this->assign(first, last);
 			return ;
 		}
-		vector (const vector &x) : _size(x._size), _capacity(x._capacity), _alloc(x._alloc), _array(NULL)
+		vector(const vector &x) : _size(x._size), _capacity(x._size), _alloc(x._alloc), _array(NULL)
 		{
 			this->_array = this->_alloc.allocate(x._size);
 			for (size_type i = 0; i < this->_size; i++)
@@ -102,15 +102,15 @@ namespace ft
 		}
 		reference		at(size_type n)
 		{
-			//if (n >= this->_size)
-			//	throw std::out_of_range(out_of_range_msg(n));
+			if (n >= this->_size)
+				throw std::out_of_range("_M_range_check\n");
 			reference	r = *(this->_array + n);
 			return (r);
 		}
 		const_reference	at(size_type n) const
 		{
-			//if (n >= this->_size)
-			//	throw std::out_of_range(out_of_range_msg(n));
+			if (n >= this->_size)
+				throw std::out_of_range("_M_range_check\n");
 			const_reference	r = *(this->_array + n);
 			return (r);
 		}
@@ -143,9 +143,8 @@ namespace ft
 		{
 			if (n > this->max_size())
 			{
-				// TODO length excep
-				//if (n > this->max_size())
-				//throw std::length_error("vector::reserve");
+				if (n > this->max_size())
+				throw std::length_error("vector::reserve");
 			}
 			if (n > this->_capacity)
 			{
@@ -195,11 +194,8 @@ namespace ft
 		}
 		void			pop_back(void)
 		{
-			if (this->_size > 0)
-			{
-				this->_alloc.destroy(&this->_array[this->_size - 1]);
-				this->_size--;
-			}
+			this->_alloc.destroy(&this->_array[this->_size - 1]);
+			this->_size--;
 			return ;
 		}
 		void			clear(void)
@@ -223,9 +219,9 @@ namespace ft
 			x._size = tmp_size;
 			return ;
 		}
-		//TODO assign can work with only push_back...
 		template <class InputIterator>
-		void			assign(InputIterator first, InputIterator last)
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
+		assign(InputIterator first, InputIterator last)
 		{
 			// protection is useless cos if last - first < 0 then undefined behavior
 			// what if capacity is 0 and I alloc 0?
@@ -256,8 +252,7 @@ namespace ft
 		}
 		iterator	erase(iterator pos)
 		{
-			this->erase(pos, ++pos);
-			return ;
+			return (this->erase(pos, ++pos));
 		}
 		iterator	erase(iterator first, iterator last)
 		{
@@ -313,7 +308,7 @@ namespace ft
 					reserve(n);
 				else
 				{
-					if (this->_size * 2 >= this->size + n)
+					if (this->_size * 2 >= this->_size + n)
 						reserve(this->_size * 2);
 					else
 						reserve(this->_size + n);
@@ -323,9 +318,9 @@ namespace ft
 				insert(position, val);
 			return ;
 		}
-		// add enable if stuffssss
 		template <class InputIterator>
-		void	insert(iterator position, InputIterator first, InputIterator last)
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
+		insert(iterator position, InputIterator first, InputIterator last)
 		{
 			size_type	n = last - first;
 			if (this->_size + n > this->_capacity)
@@ -334,7 +329,7 @@ namespace ft
 					reserve(n);
 				else
 				{
-					if (this->_size * 2 >= this->size + n)
+					if (this->_size * 2 >= this->_size + n)
 						reserve(this->_size * 2);
 					else
 						reserve(this->_size + n);
@@ -385,9 +380,37 @@ namespace ft
 int	main()
 {
 	{
+		std::vector<std::string> vec(42);
+		vec.pop_back();
+		vec.pop_back();
+		vec.pop_back();
+		std::vector<std::string> vec1(vec);
+		std::cout << vec.capacity() << " " << vec.size() << std::endl;
+		std::cout << vec1.capacity() << " " << vec1.size() << std::endl;
+		//return (0);
+	}
+	{
+		ft::vector<std::string> vec(42);
+		const std::string	array[] = {"kkkkkkkkkkk", "likjkufgkhf", "08768LIJHLKlkjhlk", "P%MLKHJGCVB", "khgkjgkj"};
+		std::cout << vec.capacity() << " " << vec.size() << std::endl;
+		for (size_t i = 0; i < 5; i++)
+			vec.pop_back();
+		std::cout << vec.capacity() << " " << vec.size() << std::endl;
+		for (size_t i = 0; i < 5; i++)
+			vec.push_back(array[i]);
+		std::cout << vec.capacity() << " " << vec.size() << std::endl;
+		//return (0);
+	}
+	{
 		std::cout << "test swap & =" << std::endl;
 		ft::vector<int> vec;
 		ft::vector<int> vec1;
+		ft::vector<std::string> vec2;
+		vec2.push_back("hello");
+		vec2.push_back("hello");
+		std::cout << vec2[0] << std::endl;
+		vec.push_back(5);
+		vec.push_back(5);
 		vec.push_back(5);
 		vec.push_back(5);
 		vec.push_back(5);
