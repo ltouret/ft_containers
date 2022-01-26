@@ -5,6 +5,7 @@
 # include <iostream>
 # include "random_access_iterator.hpp"
 # include "reverse_iterator.hpp"
+# include "utils.hpp"
 # include <vector>
 
 namespace ft
@@ -231,8 +232,8 @@ namespace ft
 			int	n = last - first;
 			if (n < 0)
 				n = 0;
-			clear();
-			reserve(n);
+			this->clear();
+			this->reserve(n);
 			//std::cout << n << " " << this->_capacity << std::endl;
 			for (; first != last; ++first)
 			{
@@ -244,8 +245,8 @@ namespace ft
 		void			assign(size_type n, const value_type& val)
 		{
 			// if n negative? undefined?
-			clear();
-			reserve(n);
+			this->clear();
+			this->reserve(n);
 			while (this->_size < n)
 			{
 				this->_alloc.construct(&this->_array[_size], val);
@@ -347,46 +348,38 @@ namespace ft
 	template <class T, class Alloc>
 	void	swap(vector<T,Alloc> &x, vector<T,Alloc> &y) {x.swap(y);}
 
-	//TODO add ft:equal, ft::lexicographical_compare instead of coding new stuff here
 	template <class T, class Alloc>
 	bool	operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
-		typename ft::vector<T>::const_iterator lit;
-		typename ft::vector<T>::const_iterator rit;
-
-		lit = lhs.begin();
-		rit = rhs.begin();
 		if (lhs.size() != rhs.size())
 			return (false);
-		while (lit != lhs.end())
-		{
-			if (*lit != *rit)
-				return (false);
-			lit++;
-			rit++;
-		}
-		return (true);
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 	template <class T, class Alloc>
 	bool	operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
 		return (!(lhs == rhs));
 	}
-	/*
 	template <class T, class Alloc>
 	bool	operator<(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 	{
-		while (first1!=last1)
-		{
-			if (first2==last2 || *first2<*first1)
-				return false;
-			else if (*first1<*first2)
-				return true;
-			++first1; ++first2;
-		}
-		return (first2!=last2);
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	}
-	*/
+	template <class T, class Alloc>
+	bool	operator<=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	{
+		return (!(rhs < lhs));
+	}
+	template <class T, class Alloc>
+	bool	operator>(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	{
+		return (rhs < lhs);
+	}
+	template <class T, class Alloc>
+	bool	operator>=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+	{
+		return (!(lhs < rhs));
+	}
 };
 
 int	main()
@@ -400,7 +393,7 @@ int	main()
 		vec.push_back(5);
 		vec1.push_back(3);
 		vec1.push_back(3);
-		vec1.push_back(3);
+		//vec1.push_back(3);
 		std::cout << (vec == vec1) << std::endl;
 
 		//vec1.swap(vec);

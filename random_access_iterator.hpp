@@ -1,3 +1,6 @@
+#ifndef RANDOM_ACCESS_ITERATOR_HPP
+# define RANDOM_ACCESS_ITERATOR_HPP
+
 # include "iterator_traits.hpp"
 
 // TODO add const
@@ -120,3 +123,5 @@ namespace ft
 		pointer													_ptr; // TODO send this to protected
 	};
 };
+
+#endif

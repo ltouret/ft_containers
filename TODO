@@ -1,7 +1,8 @@
 # TODO vector
+
 Add enable_if and stuffs
-Add protection of includes!
 Change in random access iterator the int for difference_type
+Add in randon access iterator typedef random_access_iterator iterator;
 Check TODO's in every file!
 
 Member functions
@@ -45,6 +46,6 @@ http://www.cplusplus.com/forum/general/115538/
 #Allocator:
 	#get_allocator
 
-Non-member function overloads
-	relational operators
+#Non-member function overloads
+	#relational operators
 	#swap
