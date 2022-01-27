@@ -63,7 +63,7 @@ namespace ft
 			return ;
 		}
 		vector	&operator=(const vector &x)
-		// TODO check more of dis
+		// TODO check more of operator= vector 
 		{
 			vector	tmp(x);
 			this->swap(tmp);
@@ -217,7 +217,6 @@ namespace ft
 			return ;
 		}
 		void			swap(vector &x)
-		// TODO change _alloc?
 		{
 			value_type	*tmp_array = this->_array;
 			size_type	tmp_capacity = this->_capacity;

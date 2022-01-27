@@ -120,7 +120,7 @@ namespace ft
 		}
 
 		protected:
-		pointer													_ptr; // TODO send this to protected
+		pointer													_ptr;
 	};
 };
 

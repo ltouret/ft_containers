@@ -18,7 +18,6 @@ namespace ft
 		typedef typename ft::iterator_traits<Iterator>::difference_type		difference_type;
 		typedef typename ft::iterator_traits<Iterator>::pointer				pointer;
 		typedef typename ft::iterator_traits<Iterator>::reference			reference;
-		// TODO get this in protected
 
 		// constructor
 		reverse_iterator() : _current () {};
@@ -50,11 +49,10 @@ namespace ft
 		reverse_iterator	&operator+=(difference_type n) {this->_current -= n; return (*this);};
 		reverse_iterator	&operator-=(difference_type n) {this->_current += n; return (*this);};
 
-		protected: // test agin with this??
+		protected:
 		iterator_type	_current;
 	};
 	// not member functions
-	// TODO check if this works
 	template< class Iterator1, class Iterator2 >
 	bool	operator==(const ft::reverse_iterator<Iterator1> &lhs,
 				const ft::reverse_iterator<Iterator2> &rhs)
