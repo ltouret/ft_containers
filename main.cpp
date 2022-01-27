@@ -166,14 +166,25 @@ namespace ft
 		{
 			if (n < this->_size)
 			{
-				for (size_type i = 0; i < this->_size; ++i)
+				for (size_type i = n; i < this->_size; ++i)
 					this->_alloc.destroy(&this->_array[i]);
 				this->_size = n;
 			}
-			else
+			else if (n > this->_size)
 			{
-				reserve(n);
-				for (size_type i = 0; i < n; ++i)
+				if (n > this->_capacity)
+				{
+					if (this->_capacity == 0)
+						reserve(n);
+					else
+					{
+						if (this->_size * 2 >= n)
+							reserve(this->_size * 2);
+						else
+							reserve(n);
+					}
+				}
+				for (size_type i = this->_size; i < n; ++i)
 					this->_alloc.construct(&this->_array[i], val);
 				this->_size = n;
 			}
