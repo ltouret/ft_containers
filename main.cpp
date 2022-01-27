@@ -277,10 +277,10 @@ namespace ft
 			}
 			return (first);
 		}
+		// TODO test more insert... more the range versions!
 		iterator	insert(iterator position, const value_type &val)
 		{
-			reverse_iterator	tmp;
-			reverse_iterator	rpos(position);
+			size_type	index = position - this->begin();
 
 			if (this->_size + 1 > this->_capacity)
 			{
@@ -289,16 +289,16 @@ namespace ft
 				else
 					reserve(this->_capacity * 2);
 			}
-			tmp = this->rbegin();
-			while (tmp != rpos)
-			{
-				this->_alloc.construct(&*(tmp - 1), (*tmp));
-				this->_alloc.destroy(&*(tmp));
-				tmp++;
-			}
-			this->_alloc.construct(&*(position), (val));
 			this->_size++;
-			return (position);
+			for (size_type	i = this->_size - 1; i > index; i--)
+			{
+				this->_alloc.construct(&(this->_array[i]), (this->_array[i - 1]));
+				this->_alloc.destroy(&(this->_array[i - 1]));
+			}
+			this->_alloc.construct(&(this->_array[index]), (val));
+			//std::cout << &_array[index] << " " << &*(position+1) <<std::endl;
+			//std::cout << _array[index] << " " << *position <<std::endl;
+			return (iterator(&this->_array[index]));
 		}
 		void	insert(iterator position, size_type n, const value_type &val)
 		{
@@ -379,6 +379,15 @@ namespace ft
 
 int	main()
 {
+	{
+		ft::vector<int> vec(42);
+		int	hey = 6;
+
+		std::cout << vec[1] << std::endl;
+		std:: cout << *vec.insert(vec.begin() + 1, hey) << std::endl;
+		std::cout << vec[1] << std::endl;
+		return (0);
+	}
 	{
 		std::vector<std::string> vec(42);
 		vec.pop_back();
