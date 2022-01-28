@@ -314,6 +314,7 @@ namespace ft
 		{
 			if (this->_size + n > this->_capacity)
 			{
+				size_type	backup = position - this->begin();
 				if (this->_capacity == 0)
 					reserve(n);
 				else
@@ -323,9 +324,10 @@ namespace ft
 					else
 						reserve(this->_size + n);
 				}
+				position = this->begin() + backup;
 			}
 			for (size_type	i = 0; i < n; i++)
-				insert(position, val);
+				position = insert(position, val);
 			return ;
 		}
 		template <class InputIterator>
@@ -335,6 +337,7 @@ namespace ft
 			size_type	n = last - first;
 			if (this->_size + n > this->_capacity)
 			{
+				size_type	backup = position - this->begin();
 				if (this->_capacity == 0)
 					reserve(n);
 				else
@@ -344,8 +347,9 @@ namespace ft
 					else
 						reserve(this->_size + n);
 				}
+				position = this->begin() + backup;
 			}
-			for (; first != last; first++)
+			for (; first != last; ++first, ++position)
 				insert(position, *first);
 			return ;
 		}
