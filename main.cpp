@@ -34,7 +34,9 @@ namespace ft
 		pointer					_array;
 
 		public:
-		// constructor - destructor
+
+		// constructor
+
 		explicit vector(const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL) {}
 		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _size(n), _capacity(n), _alloc(alloc), _array(NULL)
 		{
@@ -63,7 +65,6 @@ namespace ft
 			return ;
 		}
 		vector	&operator=(const vector &x)
-		// TODO check more of operator= vector 
 		{
 			vector	tmp(x);
 			this->swap(tmp);
@@ -71,14 +72,20 @@ namespace ft
 		}
 
 		// iterators
-		iterator		begin(void) {return iterator(&this->_array[0]);}
-		const_iterator	begin(void) const {return const_iterator(&this->_array[0]);}
-		iterator		end(void) {return iterator(&this->_array[_size]);}
-		const_iterator	end(void) const {return const_iterator(&this->_array[_size]);}
-		reverse_iterator	rbegin(void) {return reverse_iterator(end());}
+
+		iterator				begin(void) {return iterator(&this->_array[0]);}
+		const_iterator			begin(void) const {return const_iterator(&this->_array[0]);}
+
+		iterator				end(void) {return iterator(&this->_array[_size]);}
+		const_iterator			end(void) const {return const_iterator(&this->_array[_size]);}
+
+		reverse_iterator		rbegin(void) {return reverse_iterator(end());}
 		const_reverse_iterator	rbegin(void) const {return const_reverse_iterator(end());}
-		reverse_iterator	rend(void) {return reverse_iterator(begin());}
+
+		reverse_iterator		rend(void) {return reverse_iterator(begin());}
 		const_reverse_iterator	rend(void) const {return const_reverse_iterator(begin());}
+
+		// member funcs
 
 		size_type		size(void) const {return (this->_size);}
 		size_type		max_size(void) const {return (this->_alloc.max_size());}
@@ -148,7 +155,6 @@ namespace ft
 			}
 			if (n > this->_capacity)
 			{
-				//std::cout << n << " " << _capacity << std::endl;
 				value_type *new_array = _alloc.allocate(n);
 				for (size_type i = 0; i < this->_size; ++i)
 				{
@@ -161,7 +167,6 @@ namespace ft
 			}
 			return ;
 		}
-		// if i try to resize till max_size what happens?
 		void			resize(size_type n, value_type val = value_type())
 		{
 			if (n < this->_size)
@@ -211,7 +216,6 @@ namespace ft
 		}
 		void			clear(void)
 		{
-			// check if this works?
 			while (this->_size > 0)
 				pop_back();
 			return ;
@@ -233,14 +237,11 @@ namespace ft
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator first, InputIterator last)
 		{
-			// protection is useless cos if last - first < 0 then undefined behavior
-			// what if capacity is 0 and I alloc 0?
 			int	n = last - first;
 			if (n < 0)
 				n = 0;
 			this->clear();
 			this->reserve(n);
-			//std::cout << n << " " << this->_capacity << std::endl;
 			for (; first != last; ++first)
 			{
 				this->_alloc.construct(&this->_array[_size], *first);
@@ -250,7 +251,6 @@ namespace ft
 		}
 		void			assign(size_type n, const value_type& val)
 		{
-			// if n negative? undefined?
 			this->clear();
 			this->reserve(n);
 			while (this->_size < n)
@@ -269,7 +269,7 @@ namespace ft
 			iterator	tmp;
 
 			if (first == last)
-				return (last); //first?
+				return (last);
 			tmp = first;
 			this->_size -= last- first;
 			while (tmp != last)
@@ -287,7 +287,6 @@ namespace ft
 			}
 			return (first);
 		}
-		// TODO test more insert... more the range versions!
 		iterator	insert(iterator position, const value_type &val)
 		{
 			size_type	index = position - this->begin();
@@ -306,8 +305,6 @@ namespace ft
 				this->_alloc.destroy(&(this->_array[i - 1]));
 			}
 			this->_alloc.construct(&(this->_array[index]), (val));
-			//std::cout << &_array[index] << " " << &*(position+1) <<std::endl;
-			//std::cout << _array[index] << " " << *position <<std::endl;
 			return (iterator(&this->_array[index]));
 		}
 		void	insert(iterator position, size_type n, const value_type &val)
@@ -396,6 +393,22 @@ int	main()
 	{
 		ft::vector<int> vec;
 		for (int i = 0; i < 10; ++i) {vec.push_back(i);};
+		ft::vector<int>::iterator rit = vec.begin();
+		std::vector<int> svec;
+		for (int i = 0; i < 10; ++i) {svec.push_back(i);};
+		std::vector<int>::iterator srit = svec.begin();
+
+		std::cout << *(rit + 2) <<std::endl;
+		std::cout << *(2 + rit) <<std::endl;
+		std::cout << *(rit) <<std::endl;
+		std::cout << *(srit + 2) <<std::endl;
+		std::cout << *(2 + srit) <<std::endl;
+		std::cout << *(srit) <<std::endl;
+		//return (0);
+	}
+	{
+		ft::vector<int> vec;
+		for (int i = 0; i < 10; ++i) {vec.push_back(i);};
 		ft::vector<int>::reverse_iterator rit = vec.rbegin();
 		std::vector<int> svec;
 		for (int i = 0; i < 10; ++i) {svec.push_back(i);};
@@ -403,8 +416,8 @@ int	main()
 
 		std::cout << (vec.size()) <<std::endl;
 		std::cout << (svec.size()) <<std::endl;
-		std::cout << (vec[9]) <<std::endl;
-		std::cout << (svec[9]) <<std::endl;
+		std::cout << (rit[4]) <<std::endl;
+		std::cout << (srit[4]) <<std::endl;
 		std::cout << *(rit + 2) <<std::endl;
 		std::cout << *(srit + 2) <<std::endl;
 		std::cout << *(vec.rend() - 2) <<std::endl;

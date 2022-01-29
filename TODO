@@ -1,14 +1,11 @@
 # TODO vector
 
-#Add enable_if and stuffs
-Change in random access iterator the int for difference_type
-Add in randon access iterator typedef random_access_iterator iterator;
-Check TODO's in every file!
-
-Member functions
+TODO Fix format in existing files!
 
 # Check this link, talks about diff between const iterators / const vector
-http://www.cplusplus.com/forum/general/115538/
+#http://www.cplusplus.com/forum/general/115538/
+
+#Member functions
 
 #(constructor)
 #(destructor)

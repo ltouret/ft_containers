@@ -20,6 +20,7 @@ namespace ft
 		typedef typename ft::iterator_traits<Iterator>::reference			reference;
 
 		// constructor
+
 		reverse_iterator() : _current () {};
 		reverse_iterator(iterator_type it) : _current(it) {};
 		template<class Iter>
@@ -29,6 +30,7 @@ namespace ft
 		operator const_iterator(void) const {return const_iterator(_current);}
 
 		// member functions
+
 		template <class Iter>
 		reverse_iterator	&operator=(const reverse_iterator<Iter> &to_cpy)
 		{
@@ -37,9 +39,8 @@ namespace ft
 		}
 		iterator_type		base(void) const {return (this->_current);};
 		reference			operator*(void) const {iterator_type tmp = this->base(); return (*--tmp);};
-		pointer				operator->(void) const {iterator_type tmp = this->base(); return (--tmp);}; // check if this works
-		reference			operator[](difference_type n) const {std::cout <<"i am "<< -n-1 << std::endl; return (this->base()[-n-1]);}
-		// check if this works //TODO fix this doesnt work and change base to _current cos faster
+		pointer				operator->(void) const {iterator_type tmp = this->base(); return (--tmp);};
+		reference			operator[](difference_type n) const {return (this->base()[-n-1]);}
 		reverse_iterator	&operator++(void) {--this->_current; return (*this);};
 		reverse_iterator	operator++(int) {reverse_iterator tmp = *this; --this->_current; return (tmp);};
 		reverse_iterator	&operator--(void) {++this->_current; return (*this);};
@@ -52,7 +53,9 @@ namespace ft
 		protected:
 		iterator_type	_current;
 	};
+
 	// not member functions
+
 	template< class Iterator1, class Iterator2 >
 	bool	operator==(const ft::reverse_iterator<Iterator1> &lhs,
 				const ft::reverse_iterator<Iterator2> &rhs)
