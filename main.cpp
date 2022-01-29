@@ -394,13 +394,36 @@ namespace ft
 int	main()
 {
 	{
+		ft::vector<int> vec;
+		for (int i = 0; i < 10; ++i) {vec.push_back(i);};
+		ft::vector<int>::reverse_iterator rit = vec.rbegin();
+		std::vector<int> svec;
+		for (int i = 0; i < 10; ++i) {svec.push_back(i);};
+		std::vector<int>::reverse_iterator srit = svec.rbegin();
+
+		std::cout << (vec.size()) <<std::endl;
+		std::cout << (svec.size()) <<std::endl;
+		std::cout << (vec[9]) <<std::endl;
+		std::cout << (svec[9]) <<std::endl;
+		std::cout << *(rit + 2) <<std::endl;
+		std::cout << *(srit + 2) <<std::endl;
+		std::cout << *(vec.rend() - 2) <<std::endl;
+		std::cout << *(svec.rend() - 2) <<std::endl;
+		std::cout << (vec.rend() - (vec.rbegin() + 2)) <<std::endl;
+		std::cout << (svec.rend() - (svec.rbegin() + 2)) <<std::endl;
+		std::cout << (vec.rend() > (vec.rbegin() + 2)) <<std::endl;
+		std::cout << (svec.rend() > (svec.rbegin() + 2)) <<std::endl;
+
+		//return (0);
+	}
+	{
 		ft::vector<int> vec(42);
 		int	hey = 6;
 
 		std::cout << vec[1] << std::endl;
-		std:: cout << *vec.insert(vec.begin() + 1, hey) << std::endl;
+		std::cout << *vec.insert(vec.begin() + 1, hey) << std::endl;
 		std::cout << vec[1] << std::endl;
-		return (0);
+		//return (0);
 	}
 	{
 		std::vector<std::string> vec(42);
