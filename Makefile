@@ -6,7 +6,7 @@
 #    By: ltouret <ltouret@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/21 14:41:56 by ltouret           #+#    #+#              #
-#    Updated: 2021/10/18 16:25:30 by ltouret          ###   ########.fr        #
+#    Updated: 2022/01/30 19:34:49 by ltouret          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 
 SHELL		= /bin/sh
 
-NAME		= vector
+NAME		= a.out
 
 SRCS		= main.cpp
 

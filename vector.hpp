@@ -33,10 +33,9 @@ namespace ft
 		allocator_type			_alloc;
 		pointer					_array;
 
-		public:
-
 		// constructor
 
+		public:
 		explicit vector(const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc), _array(NULL) {}
 		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _size(n), _capacity(n), _alloc(alloc), _array(NULL)
 		{
@@ -351,6 +350,9 @@ namespace ft
 			return ;
 		}
 	};
+
+	// not member funcs
+
 	template <class T, class Alloc>
 	void	swap(vector<T,Alloc> &x, vector<T,Alloc> &y) {x.swap(y);}
 

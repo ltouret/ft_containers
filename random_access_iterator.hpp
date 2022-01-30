@@ -19,6 +19,12 @@ namespace ft
 		typedef std::ptrdiff_t									difference_type;
 		typedef std::random_access_iterator_tag					iterator_category;
 
+		protected:
+		pointer													_ptr;
+
+		// constructor
+
+		public:
 		random_access_iterator(void): _ptr(NULL) {}
 		random_access_iterator(pointer ptr): _ptr(ptr) {}
 		random_access_iterator(const random_access_iterator &to_cpy) : _ptr(to_cpy._ptr) {}
@@ -30,6 +36,8 @@ namespace ft
 		~random_access_iterator(void) {}
 
 		operator const_iterator(void) const {return const_iterator(_ptr);}
+
+		// member functions
 
 		bool					operator==(const random_access_iterator &to_cmp) const {return (this->_ptr == to_cmp._ptr);}
 		bool					operator!=(const random_access_iterator &to_cmp) const {return (this->_ptr != to_cmp._ptr);}
@@ -115,9 +123,6 @@ namespace ft
 		{
 			return (this->_ptr[n]);
 		}
-
-		protected:
-		pointer													_ptr;
 	};
 };
 

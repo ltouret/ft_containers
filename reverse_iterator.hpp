@@ -12,22 +12,26 @@ namespace ft
 	{
 		public:
 		typedef Iterator													iterator_type;
-		typedef reverse_iterator<const Iterator> 							const_iterator;
+		typedef reverse_iterator<const Iterator> 							const_reverse_iterator;
 		typedef typename ft::iterator_traits<Iterator>::value_type			value_type;
 		typedef typename ft::iterator_traits<Iterator>::iterator_category 	iterator_category;
 		typedef typename ft::iterator_traits<Iterator>::difference_type		difference_type;
 		typedef typename ft::iterator_traits<Iterator>::pointer				pointer;
 		typedef typename ft::iterator_traits<Iterator>::reference			reference;
 
+		protected:
+		iterator_type	_current;
+
 		// constructor
 
+		public:
 		reverse_iterator() : _current () {};
 		reverse_iterator(iterator_type it) : _current(it) {};
 		template<class Iter>
 		reverse_iterator(const reverse_iterator<Iter> &to_cpy) : _current(to_cpy.base()) {};
 		~reverse_iterator() {};
 
-		operator const_iterator(void) const {return const_iterator(_current);}
+		operator const_reverse_iterator(void) const {return const_reverse_iterator(_current);}
 
 		// member functions
 
@@ -49,9 +53,6 @@ namespace ft
 		reverse_iterator	operator-(difference_type n) const {return (reverse_iterator(this->base() + n));};
 		reverse_iterator	&operator+=(difference_type n) {this->_current -= n; return (*this);};
 		reverse_iterator	&operator-=(difference_type n) {this->_current += n; return (*this);};
-
-		protected:
-		iterator_type	_current;
 	};
 
 	// not member functions

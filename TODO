@@ -1,6 +1,21 @@
+# TODO stack
+
+#(constructor)
+#(destructor)
+
+#Member functions:
+	#empty
+	#size
+	#top
+	#push
+	#pop
+
+relational operators -> need to do like reverse_iterator!
+
 # TODO vector
 
 TODO Fix format in existing files!
+TODO Fix typedef in vector & check in the other files if needed too!
 
 # Check this link, talks about diff between const iterators / const vector
 #http://www.cplusplus.com/forum/general/115538/
