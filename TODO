@@ -1,4 +1,48 @@
+# TODO map
+
+Member functions
+
+(constructor)
+(destructor)
+operator=
+
+Iterators:
+	begin
+	end
+	rbegin
+	rend
+
+Capacity:
+	empty
+	size
+	max_size
+
+Element access:
+	operator[]
+
+Modifiers:
+	insert
+	erase
+	swap
+	clear
+
+Observers:
+	key_comp
+	value_comp
+
+Operations:
+	find
+	count
+	lower_bound
+	upper_bound
+	equal_range
+
+Allocator:
+	get_allocator
+
 # TODO stack
+
+TODO try testers in stack
 
 #(constructor)
 #(destructor)
@@ -10,7 +54,7 @@
 	#push
 	#pop
 
-relational operators -> need to do like reverse_iterator!
+# relational operators -> need to do like reverse_iterator!
 
 # TODO vector
 
