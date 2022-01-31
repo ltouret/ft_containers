@@ -351,7 +351,7 @@ namespace ft
 		}
 	};
 
-	// not member funcs
+	// non-member funcs overloads
 
 	template <class T, class Alloc>
 	void	swap(vector<T,Alloc> &x, vector<T,Alloc> &y) {x.swap(y);}

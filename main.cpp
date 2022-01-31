@@ -29,35 +29,38 @@ namespace ft
 		void				push(const value_type &val) {this->_c.push_back(val);}
 		void				pop(void) {this->_c.pop_back();}
 
-
 		// non-member funcs overloads
-		//should probably do the same as reverse_iterator! TODO
 
 		friend bool	operator==(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
 		{
 			return (lhs._c == rhs._c);
 		}
-		friend bool	operator!=(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
-		{
-			return (lhs._c != rhs._c);
-		}
 		friend bool	operator<(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
 		{
 			return (lhs._c < rhs._c);
 		}
-		friend bool	operator<=(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
-		{
-			return (lhs._c <= rhs._c);
-		}
-		friend bool	operator>(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
-		{
-			return (lhs._c > rhs._c);
-		}
-		friend bool	operator>=(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
-		{
-			return (lhs._c >= rhs._c);
-		}
 	};
+
+	template <class T, class Container>
+	bool	operator!=(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
+	{
+		return (!(lhs == rhs));
+	}
+	template <class T, class Container>
+	bool	operator<=(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
+	{
+		return (!(rhs < lhs));
+	}
+	template <class T, class Container>
+	bool	operator>(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
+	{
+		return (rhs < lhs);
+	}
+	template <class T, class Container>
+	bool	operator>=(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
+	{
+		return (!(lhs < rhs));
+	}
 };
 
 int	main()

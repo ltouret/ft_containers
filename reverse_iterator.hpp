@@ -55,7 +55,7 @@ namespace ft
 		reverse_iterator	&operator-=(difference_type n) {this->_current += n; return (*this);};
 	};
 
-	// not member functions
+	// non-member funcs overloads
 
 	template< class Iterator1, class Iterator2 >
 	bool	operator==(const ft::reverse_iterator<Iterator1> &lhs,
