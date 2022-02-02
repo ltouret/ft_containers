@@ -3,11 +3,12 @@
 
 //#include <stack>
 //#include <vector>
+#include <map>
 #include "utils.hpp"
 
 namespace ft
 {
-	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > > // TODO add my ft::pair
+	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
 	class map
 	{
 		public:
@@ -28,8 +29,13 @@ namespace ft
 		typedef std::ptrdiff_t														difference_type;
 		typedef size_t																size_type;
 
+		// add other stuff
+		private:
+		allocator_type	_alloc;
+		size_type		_size;
+
 		public:
-		// how do i do this?
+		// how do i do this? for typedef?
 		class value_compare
 		{
 			friend class map;
@@ -48,11 +54,44 @@ namespace ft
 				return comp(x.first, y.first);
 			}
 		};
+
+		allocator_type	get_allocator(void) const
+		{
+			allocator_type cpy_allocator(_alloc);
+			return (cpy_allocator);
+		}
+		size_type		size(void) const {return (this->_size);}
+		size_type		max_size(void) const {return (this->_alloc.max_size());}
+		bool			empty(void) const
+		{
+			if (this->_size == 0)
+				return (true);
+			else
+				return (false);
+		}
+
+		//key_compare		key_comp(void) const;
+		//value_compare		value_comp(void) const;
 	};
 };
 
 int	main()
 {
+	{
+	  std::map<int,int> mymap;
+
+  mymap[21] = 100;
+  mymap[13] = 200;
+  mymap[33] = 300;
+  mymap[11] = 300;
+  mymap[15] = 300;
+  mymap[20] = 300;
+
+  // show content:
+  for (std::map<int,int>::reverse_iterator it=mymap.rbegin(); it!=mymap.rend(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
+	}
+	return 0;
 	{
 		// test with const!
 		ft::stack<ft::vector<int> > stark;

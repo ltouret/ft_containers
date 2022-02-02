@@ -16,10 +16,10 @@ Iterators:
 	rbegin
 	rend
 
-Capacity:
-	empty
-	size
-	max_size
+#Capacity:
+#	empty
+#	size
+#	max_size
 
 Element access:
 	operator[]
@@ -41,8 +41,8 @@ Operations:
 	upper_bound
 	equal_range
 
-Allocator:
-	get_allocator
+#Allocator:
+#	get_allocator
 
 # TODO stack
 

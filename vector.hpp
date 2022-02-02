@@ -96,12 +96,12 @@ namespace ft
 			else
 				return (false);
 		}
-		reference		operator[] (size_type n)
+		reference		operator[](size_type n)
 		{
 			reference	r = this->_array[n];
 			return (r);
 		}
-		const_reference	operator[] (size_type n) const
+		const_reference	operator[](size_type n) const
 		{
 			const_reference	r = this->_array[n];
 			return (r);
@@ -120,27 +120,27 @@ namespace ft
 			const_reference	r = *(this->_array + n);
 			return (r);
 		}
-		reference		front()
+		reference		front(void)
 		{
 			reference	r = *(this->_array);
 			return (r);
 		}
-		const_reference	front() const
+		const_reference	front(void) const
 		{
 			const_reference	r = *(this->_array);
 			return (r);
 		}
-		reference		back()
+		reference		back(void)
 		{
 			reference	r = *(this->_array + this->_size - 1);
 			return (r);
 		}
-		const_reference	back() const
+		const_reference	back(void) const
 		{
 			const_reference	r = *(this->_array + this->_size - 1);
 			return (r);
 		}
-		allocator_type	get_allocator() const
+		allocator_type	get_allocator(void) const
 		{
 			allocator_type cpy_allocator(_alloc);
 			return (cpy_allocator);
