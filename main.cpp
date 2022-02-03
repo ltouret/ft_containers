@@ -89,7 +89,8 @@ int	main()
 
   // show content:
   for (std::map<int,int>::reverse_iterator it=mymap.rbegin(); it!=mymap.rend(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
+    std::cout << it->first << " => " << it->second << " " << &*it << '\n';
+	std::cout << &*mymap.begin() << " " << &*mymap.end() << std::endl;
 	}
 	return 0;
 	{
