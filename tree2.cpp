@@ -1,6 +1,8 @@
 #include <iostream>
 #include <bits/stdc++.h>
 
+// TODO add search and delete and delete fix
+
 using namespace std;
  
 enum Color {RED, BLACK};
@@ -297,21 +299,19 @@ Node *minimum(Node *node) {
     return y;
   }
 
-/*
-  NodePtr predecessor(NodePtr x) {
-    if (x->left != TNULL) {
+  Node *predecessor(Node *x) {
+    if (x->left != NULL) {
       return maximum(x->left);
     }
 
-    NodePtr y = x->parent;
-    while (y != TNULL && x == y->left) {
+    Node *y = x->parent;
+    while (y != NULL && x == y->left) {
       x = y;
       y = y->parent;
     }
 
     return y;
   }
-*/
 
 // TODO if i add twice same key seg faults.
 
@@ -340,8 +340,20 @@ int main()
  	//cout << minimum(tree.root)->data << endl;
 	Node *begin = minimum(tree.root);
 	Node *end = maximum(tree.root)->right;
-	//Node *end = NULL;
-	//cout << end << endl;
+
+	Node *rrend = new Node(101);
+	rrend->parent = maximum(tree.root);
+	Node *rrbegin = predecessor(minimum(tree.root));
+
+	cout << rrbegin << endl;
+	cout << rrend->parent->data << endl;
+	rrend = predecessor(rrend);
+
+	while (rrend != rrbegin)
+	{
+		//cout << rrend->data << " " << begin << endl;
+		rrend = predecessor(rrend);
+	}
 	while (begin != end)
 	{
 		cout << begin->data << " " << begin << endl;

@@ -254,7 +254,7 @@ class RedBlackTree {
     TNULL->color = 0;
     TNULL->left = nullptr;
     TNULL->right = nullptr;
-    //TNULL->parent = nullptr;
+    TNULL->parent = nullptr;
     root = TNULL;
   }
 
@@ -407,9 +407,9 @@ class RedBlackTree {
 
   void printTree() {
     if (root) {
-      printHelper(this->root, "", true);
-	  /*
+     // printHelper(this->root, "", true);
 	  cout << this->root->parent << endl;
+	  /*
 	  NodePtr begin = minimum(this->root);
 	  NodePtr end = maximum(this->root)->left;
 	  //end = successor(end);
@@ -421,8 +421,8 @@ class RedBlackTree {
 	  	cout << begin->data << " " << begin << std::endl; 
 	    begin = successor(begin);
 	  }
+	  */
 	//cout << begin->data << endl;
-	*/
     }
   }
 };

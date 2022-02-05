@@ -85,47 +85,15 @@ int	main()
   mymap[33] = 300;
   mymap[11] = 300;
   mymap[15] = 300;
+  // doesnt break if a add another...
   mymap[20] = 300;
+  mymap[20] = 300;
+  mymap[20] = 330;
 
   // show content:
   for (std::map<int,int>::reverse_iterator it=mymap.rbegin(); it!=mymap.rend(); ++it)
     std::cout << it->first << " => " << it->second << " " << &*it << '\n';
 	std::cout << &*mymap.begin() << " " << &*mymap.end() << std::endl;
-	}
-	return 0;
-	{
-		// test with const!
-		ft::stack<ft::vector<int> > stark;
-		ft::stack<ft::vector<int> > stark1;
-		ft::vector<int> vec(4,4);
-		ft::vector<int> vec1(4,4);
-
-		stark.push(vec);
-		stark1.push(vec1);
-
-		std::cout << "member funcs tests" << std::endl;
-
-		//stark.pop();
-		std::cout << stark.empty() << std::endl;
-		std::cout << stark.size() << std::endl;
-		std::cout << (stark.top()[0]) << std::endl;
-
-		std::cout << "" << std::endl;
-
-		//stark1.pop();
-		std::cout << stark1.empty() << std::endl;
-		std::cout << stark1.size() << std::endl;
-		std::cout << (stark1.top()[0]) << std::endl;
-
-		std::cout << "" << std::endl;
-		std::cout << "equals tests" << std::endl;
-
-		std::cout << (stark == stark1) << std::endl;
-		std::cout << (stark != stark1) << std::endl;
-		std::cout << (stark < stark1) << std::endl;
-		std::cout << (stark <= stark1) << std::endl;
-		std::cout << (stark > stark1) << std::endl;
-		std::cout << (stark >= stark1) << std::endl;
 	}
 	return 0;
 }
