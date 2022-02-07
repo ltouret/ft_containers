@@ -27,6 +27,8 @@ class RBTree
 {
 public:
     Node *root;
+    Node *_begin;
+    Node *_end;
 protected:
     void rotateLeft(Node *&, Node *&);
     void rotateRight(Node *&, Node *&);
@@ -37,6 +39,16 @@ public:
     void insert(const int &n);
     void inorder();
     void levelOrder();
+	void	setup();
+	void	detach();
+ 
+
+void	init()
+{
+	_begin = new Node(0);
+	_end  = new Node(1);
+	std::cout << "yo\n";
+}
 };
  
 // A recursive function to do inorder traversal
@@ -245,7 +257,7 @@ void RBTree::fixViolation(Node *&root, Node *&pt)
  
     root->color = BLACK;
 }
- 
+
 // Function to insert a new node with given data
 void RBTree::insert(const int &data)
 {
@@ -256,6 +268,7 @@ void RBTree::insert(const int &data)
  
     // fix Red Black Tree violations
     fixViolation(root, pt);
+	setup();
 }
  
 // Function to do inorder and level order traversals
@@ -282,6 +295,32 @@ Node *minimum(Node *node) {
     return node;
   }
 
+void	RBTree::detach()
+{
+	_begin->parent->right = NULL;
+	_end->parent->left = NULL;
+}
+
+/*
+void	RBTree::attach()
+{
+	min->right = NULL;
+	max->left = NULL;
+}
+*/
+
+void	RBTree::setup()
+{
+	Node *min = minimum(root);
+	_begin->parent = min;
+	if (min)
+		min->right = _begin;
+
+	Node *max = maximum(root);
+	_end->parent = max;
+	if (max)
+		max->left = _end;
+}
   Node *successor(Node *x) {
 	  Node *tmp = x;
     if (tmp->right != NULL) {
@@ -319,6 +358,7 @@ Node *minimum(Node *node) {
 int main()
 {
     RBTree tree;
+	tree.init();
   tree.insert(55);
   tree.insert(40);
   tree.insert(65);

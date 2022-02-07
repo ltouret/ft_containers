@@ -90,6 +90,12 @@ int	main()
   mymap[20] = 300;
   mymap[20] = 330;
 
+	{
+		// TODO mymap.end() can go backwards.
+	std::map<int, int>::iterator eit = mymap.end();
+	--eit;
+	std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
+	}
   // show content:
   for (std::map<int,int>::reverse_iterator it=mymap.rbegin(); it!=mymap.rend(); ++it)
     std::cout << it->first << " => " << it->second << " " << &*it << '\n';
