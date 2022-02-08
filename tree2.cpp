@@ -41,13 +41,14 @@ public:
     void levelOrder();
 	void	setup();
 	void	detach();
+	Node	*right(Node *root);
+	Node	*left(Node *root);
  
 
 void	init()
 {
 	_begin = new Node(0);
 	_end  = new Node(1);
-	std::cout << "yo\n";
 }
 };
  
@@ -261,6 +262,7 @@ void RBTree::fixViolation(Node *&root, Node *&pt)
 // Function to insert a new node with given data
 void RBTree::insert(const int &data)
 {
+	detach();
     Node *pt = new Node(data);
  
     // Do a normal BST insert
@@ -297,29 +299,39 @@ Node *minimum(Node *node) {
 
 void	RBTree::detach()
 {
-	_begin->parent->right = NULL;
-	_end->parent->left = NULL;
+	if (_begin->parent)
+		_begin->parent->left = NULL;
+	if (_end->parent)
+	_end->parent->right = NULL;
 }
 
-/*
-void	RBTree::attach()
+Node	*RBTree::left(Node *root)
 {
-	min->right = NULL;
-	max->left = NULL;
+	Node *curr = root;
+	while (curr && curr->left && curr->left != _begin)
+		curr = curr->left;
+	return curr;
 }
-*/
+
+Node	*RBTree::right(Node *root)
+{
+	Node *curr = root;
+	while (curr && curr->right && curr->right != _end)
+		curr = curr->right;
+	return curr;
+}
 
 void	RBTree::setup()
 {
-	Node *min = minimum(root);
+	Node *min = left(root);
 	_begin->parent = min;
 	if (min)
-		min->right = _begin;
+		min->left = _begin;
 
-	Node *max = maximum(root);
+	Node *max = right(root);
 	_end->parent = max;
 	if (max)
-		max->left = _end;
+		max->right = _end;
 }
   Node *successor(Node *x) {
 	  Node *tmp = x;
@@ -358,48 +370,33 @@ void	RBTree::setup()
 int main()
 {
     RBTree tree;
+
 	tree.init();
+	tree.detach();
+  tree.insert(1);
+  tree.insert(0);
   tree.insert(55);
   tree.insert(40);
   tree.insert(65);
   tree.insert(60);
   tree.insert(75);
-  //tree.insert(95);
   tree.insert(57);
-  //tree.insert(57);
- 
- /*
-    tree.insert(7);
-    tree.insert(6);
-    tree.insert(5);
-    tree.insert(4);
-    tree.insert(3);
-    tree.insert(2);
-    tree.insert(1);
-	*/
- 	//cout << minimum(tree.root)->data << endl;
-	Node *begin = minimum(tree.root);
-	Node *end = maximum(tree.root)->right;
+  //tree.insert(95);
 
-	Node *rrend = new Node(101);
-	rrend->parent = maximum(tree.root);
-	Node *rrbegin = predecessor(minimum(tree.root));
+	Node *begin = tree._begin->parent;
+	Node *end = tree._end;
 
-	cout << rrbegin << endl;
-	cout << rrend->parent->data << endl;
-	rrend = predecessor(rrend);
+ 	tree.detach();
+ 	tree.setup();
 
-	while (rrend != rrbegin)
-	{
-		//cout << rrend->data << " " << begin << endl;
-		rrend = predecessor(rrend);
-	}
 	while (begin != end)
 	{
 		cout << begin->data << " " << begin << endl;
 		begin = successor(begin);
 	}
  
+	tree.detach();
+
     cout << endl;
     cout << "Inorder Traversal of Created Tree\n";
     tree.inorder();
@@ -407,6 +404,5 @@ int main()
     cout << "\n\nLevel Order Traversal of Created Tree\n";
     tree.levelOrder();
 	cout << endl;
- 
     return 0;
 }
