@@ -270,7 +270,7 @@ void RBTree::insert(const int &data)
  
     // fix Red Black Tree violations
     fixViolation(root, pt);
-	setup();
+	//setup();
 }
  
 // Function to do inorder and level order traversals
@@ -373,8 +373,6 @@ int main()
 
 	tree.init();
 	tree.detach();
-  tree.insert(1);
-  tree.insert(0);
   tree.insert(55);
   tree.insert(40);
   tree.insert(65);
@@ -383,18 +381,40 @@ int main()
   tree.insert(57);
   //tree.insert(95);
 
-	Node *begin = tree._begin->parent;
-	Node *end = tree._end;
+	//Node *begin = tree._begin->parent;
+	//Node *end = tree._end;
 
- 	tree.detach();
- 	tree.setup();
+	tree.detach();
+	Node *begin = minimum(tree.root);
+	Node *end = tree._end;
+	end->parent = maximum(tree.root);
+
+	// each time insert erase is called update _end->parent = maximun(tree.root);
+	//the while loop l406 407 explains what to do when iterator ++ is called
+
+	std::cout << begin->data << " " << end->data << std::endl;
+
+	tree.detach();
+	//tree.setup();
+
+	std::cout << (end)->parent << std::endl;
+	std::cout << (successor(end)) << std::endl;
+	std::cout << (successor(end))->data << std::endl;
+	std::cout << (predecessor(end))->data << std::endl;
+	std::cout << (predecessor(predecessor(end)))->data << std::endl;
 
 	while (begin != end)
 	{
 		cout << begin->data << " " << begin << endl;
+		if (begin == maximum(tree.root))
+		{
+			begin = end;
+			break;
+		}
 		begin = successor(begin);
 	}
  
+ /*
 	tree.detach();
 
     cout << endl;
@@ -404,5 +424,6 @@ int main()
     cout << "\n\nLevel Order Traversal of Created Tree\n";
     tree.levelOrder();
 	cout << endl;
+	*/
     return 0;
 }

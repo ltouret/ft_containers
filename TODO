@@ -44,7 +44,7 @@ Operations:
 #Allocator:
 #	get_allocator
 
-# TODO stack
+TODO stack
 
 TODO try testers in stack
 
@@ -60,7 +60,7 @@ TODO try testers in stack
 
 # relational operators -> need to do like reverse_iterator!
 
-# TODO vector
+TODO vector
 
 TODO Fix format in existing files!
 TODO Fix typedef in vector & check in the other files if needed too!
