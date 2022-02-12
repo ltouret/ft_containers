@@ -6,6 +6,8 @@
 #include <map>
 #include "utils.hpp"
 #include "node.hpp"
+//TODO erase me
+#include <queue>
 
 namespace ft
 {
@@ -30,14 +32,34 @@ namespace ft
 		typedef Node<value_type>													map_node;
 		typedef std::ptrdiff_t														difference_type;
 		typedef size_t																size_type;
+		typedef typename Alloc::template rebind<map_node>::other					alloc_node;
 
 		// add other stuff
-		private:
+		// TODO all is public to test!
+		public:
+		explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()): _root(),  _size(0), _compare(comp), _alloc(alloc)
+		{
+			//initialise_constructor();
+		}
+
+		void initialise_constructor()
+		{
+		_root = _alloc.allocate(1);
+		_alloc.construct(_root, value_type());
+
+		_end = _alloc.allocate(1);
+		_alloc.construct(_end, value_type());
+
+		_end->parent = _root;
+		_root->left = NULL;
+		_root->right = NULL;
+		}
+
 		map_node		*_root;
 		map_node		*_end;
-		key_compare		_compare;
-		allocator_type	_alloc;
 		size_type		_size;
+		key_compare		_compare;
+		alloc_node		_alloc;
 
 		// left rotates the given node
 		void leftRotate(map_node *x)
@@ -306,7 +328,6 @@ namespace ft
 		}
 
 		// prints level order for given node
-		/*
 		void levelOrder(map_node *x) {
 			if (x == NULL)
 			// return if node is null
@@ -326,7 +347,7 @@ namespace ft
 			q.pop();
 
 			// print node value
-			std::cout << curr->value << " ";
+			std::cout << curr->value.first << " ";
 
 			// push children to queue
 			if (curr->left != NULL)
@@ -341,53 +362,71 @@ namespace ft
 			if (x == NULL)
 			return;
 			inorder(x->left);
-			std::cout << x->value << " ";
+			std::cout << x->value.first << " ";
 			inorder(x->right);
 		}
-		*/
 
 		map_node *getRoot() { return _root; }
 
 		// searches for given value
 		// if found returns the node (used for delete)
 		// else returns the last node while traversing (used in insert)
-		map_node *search(int n) {
+		map_node *search(const key_type &key)
+		{
 			map_node *temp = _root;
-			while (temp != NULL) {
-			if (n < temp->value) {
-				if (temp->left == NULL)
-				break;
+			while (temp != NULL)
+			{
+				if (key < temp->value.first)
+				{
+					if (temp->left == NULL)
+						break;
+					else
+						temp = temp->left;
+				}
+				else if (key == temp->value.first)
+					break;
 				else
-				temp = temp->left;
-			} else if (n == temp->value) {
-				break;
-			} else {
-				if (temp->right == NULL)
-				break;
-				else
-				temp = temp->right;
+				{
+					if (temp->right == NULL)
+						break;
+					else
+						temp = temp->right;
+				}
 			}
-			}
-
 			return temp;
 		}
 
+		map_node	*new_node(const value_type &val, map_node *parent)
+		{
+			map_node *newNode = _alloc.allocate(1);
+			_alloc.construct(newNode, val);
+
+			newNode->parent = parent;
+			//return_node = newNode;
+			this->_size++;
+			return newNode;
+		}
+
 		// inserts the given value to tree
-		void insert(int n) {
-			map_node *newmap_node = new map_node(n);
+		// TODO change return type!
+		void insert(const value_type &val)
+		{
+			//key_compare	compare = key_compare();
+			//map_node	*newmap_node = new map_node(n);
 			if (_root == NULL)
 			{
 				// when _root is null
 				// simply insert value at _root
+				map_node	*newmap_node = new_node(val, NULL);
 				newmap_node->color = BLACK;
 				_root = newmap_node;
 			}
 			else
 			{
 				// TODO update new value of pair (val->second) here!! if elem already exists in map
-				map_node *temp = search(n);
+				map_node *temp = search(val.first);
 
-				if (temp->value == n) {
+				if (temp->value.first == val.first) {
 					// return if value already exists
 					return;
 			}
@@ -396,9 +435,10 @@ namespace ft
 			// where the value is to be inserted
 
 			// connect new node to correct node
-			newmap_node->parent = temp;
+			map_node	*newmap_node = new_node(val, temp);
+			//newmap_node->parent = temp;
 
-			if (n < temp->value)
+			if (val.first < temp->value.first)
 				temp->left = newmap_node;
 			else
 				temp->right = newmap_node;
@@ -470,56 +510,21 @@ namespace ft
 int	main()
 {
 	{
-	  std::map<int,int> mymap;
-
-  mymap[21] = 100;
-  mymap[13] = 200;
-  mymap[33] = 300;
-  mymap[11] = 300;
-  mymap[15] = 300;
-  // doesnt break if a add another...
-  mymap[20] = 300;
-  mymap[20] = 300;
-  mymap[20] = 330;
-
-		// TODO mymap.end() can go backwards.
-		// TODO mymap.begin() -- goes to mymap.end(), then end - 1, etc
-	std::map<int, int>::iterator eit = mymap.end();
-	std::map<int, int>::iterator it = mymap.begin();
-	std::cout << &*it << " " << it->first << " => " << it->second << std::endl;
-	it--;
-	std::cout << &*it << " " << it->first << " => " << it->second << std::endl;
-	it--;
-	std::cout << &*it << " " << it->first << " => " << it->second << std::endl;
-	it--;
-	std::cout << &*it << " " << it->first << " => " << it->second << std::endl;
-	//--eit;
-	std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
-  // show content:
-  for (std::map<int,int>::reverse_iterator it=mymap.rbegin(); it!=mymap.rend(); ++it)
-    std::cout << it->first << " => " << it->second << " " << &*it << '\n';
-	std::cout << &*mymap.begin() << " " << &*mymap.end() << std::endl;
-	std::cout << &*mymap.begin() << " " << &*(++mymap.end()) << std::endl;
-  mymap[36] = 300;
-  mymap[38] = 300;
-  //mymap.erase(36);
-	std::cout << mymap.begin()->first << " " << (++mymap.end())->first << std::endl;
-	std::cout << mymap.begin()->first << " " << (--mymap.end())->first << std::endl;
-	++eit;
-	std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
-	++eit;
-	std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
-	++eit;
-	std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
-	++eit;
-	//std::cout << std::endl;
-	//int i = 0;
-	//while (i < 100)
-	{
-		std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
-		++eit;
-		//i++;
-	}
+		ft::map<int, int> m;
+		m.insert(ft::pair<int,int>(55,100));
+		m.insert(ft::pair<int,int>(40,100));
+		m.insert(ft::pair<int,int>(65,100));
+		m.insert(ft::pair<int,int>(60,100));
+		m.insert(ft::pair<int,int>(75,100));
+		m.insert(ft::pair<int,int>(57,100));
+		std::cout << m._root->value.first << std::endl;
+		std::cout << m._root->left->value.first << std::endl;
+		std::cout << m._root->right->value.first << std::endl;
+		//std::cout << m.search(4)->value.first << std::endl;
+		m.levelOrder(m._root);
+		std::cout << std::endl;
+		m.inorder(m._root);
+		std::cout << std::endl;
 	}
 	return 0;
 }

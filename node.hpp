@@ -24,12 +24,9 @@ namespace ft
 			parent = left = right = NULL;
 			color = RED;
 		}
-		Node(int value) : value(value)
+		Node(const Pair &data) : value(data)
 		{
 			parent = left = right = NULL;
-
-			// Node is created during insertion
-			// Node is red at insertion
 			color = RED;
 		}
 
