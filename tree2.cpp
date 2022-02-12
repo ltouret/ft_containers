@@ -5,7 +5,9 @@
 
 using namespace std;
  
-enum Color {RED, BLACK};
+//enum Color {RED, BLACK};
+# define RED 0
+# define BLACK 1
  
 struct Node
 {
@@ -262,7 +264,6 @@ void RBTree::fixViolation(Node *&root, Node *&pt)
 // Function to insert a new node with given data
 void RBTree::insert(const int &data)
 {
-	detach();
     Node *pt = new Node(data);
  
     // Do a normal BST insert
@@ -270,7 +271,7 @@ void RBTree::insert(const int &data)
  
     // fix Red Black Tree violations
     fixViolation(root, pt);
-	//setup();
+	setup();
 }
  
 // Function to do inorder and level order traversals
@@ -297,14 +298,6 @@ Node *minimum(Node *node) {
     return node;
   }
 
-void	RBTree::detach()
-{
-	if (_begin->parent)
-		_begin->parent->left = NULL;
-	if (_end->parent)
-	_end->parent->right = NULL;
-}
-
 Node	*RBTree::left(Node *root)
 {
 	Node *curr = root;
@@ -323,15 +316,8 @@ Node	*RBTree::right(Node *root)
 
 void	RBTree::setup()
 {
-	Node *min = left(root);
-	_begin->parent = min;
-	if (min)
-		min->left = _begin;
-
-	Node *max = right(root);
-	_end->parent = max;
-	if (max)
-		max->right = _end;
+	_begin->parent = left(root);
+	_end->parent = right(root);
 }
   Node *successor(Node *x) {
 	  Node *tmp = x;
@@ -351,13 +337,14 @@ void	RBTree::setup()
   }
 
   Node *predecessor(Node *x) {
-    if (x->left != NULL) {
-      return maximum(x->left);
+	 Node *tmp = x;
+    if (tmp->left != NULL) {
+      return maximum(tmp->left);
     }
 
-    Node *y = x->parent;
-    while (y != NULL && x == y->left) {
-      x = y;
+    Node *y = tmp->parent;
+    while (y != NULL && tmp == y->left) {
+      tmp = y;
       y = y->parent;
     }
 
@@ -372,19 +359,17 @@ int main()
     RBTree tree;
 
 	tree.init();
-	tree.detach();
   tree.insert(55);
   tree.insert(40);
   tree.insert(65);
   tree.insert(60);
   tree.insert(75);
   tree.insert(57);
-  //tree.insert(95);
+  //tree.insert(57);
 
 	//Node *begin = tree._begin->parent;
 	//Node *end = tree._end;
 
-	tree.detach();
 	Node *begin = minimum(tree.root);
 	Node *end = tree._end;
 	end->parent = maximum(tree.root);
@@ -394,7 +379,6 @@ int main()
 
 	std::cout << begin->data << " " << end->data << std::endl;
 
-	tree.detach();
 	//tree.setup();
 
 	std::cout << (end)->parent << std::endl;
@@ -413,10 +397,36 @@ int main()
 		}
 		begin = successor(begin);
 	}
- 
- /*
-	tree.detach();
 
+	{
+		// demo mymap.begin()-- x 2
+		std::cout << std::endl << "demo mymap.begin()-- x 2" << std::endl;
+		Node *current = minimum(tree.root);
+		Node *end = tree._end;
+		end->parent = maximum(tree.root);
+
+		std::cout << begin->data << " " << current->data << std::endl;
+
+		/*
+		std::cout << (end)->parent << std::endl;
+		std::cout << (successor(end)) << std::endl;
+		std::cout << (successor(end))->data << std::endl;
+		std::cout << (predecessor(end))->data << std::endl;
+		std::cout << (predecessor(predecessor(end)))->data << std::endl;
+		*/
+
+		cout << current->data << " " << current << endl;
+		if (current == minimum(tree.root))
+		{
+			current = end;
+		}
+		std::cout << (current) << " " << current->data << std::endl;
+		std::cout << (current)->parent << " " << current->parent->data << std::endl;
+		current = predecessor(current);
+		std::cout << (current) << " " << current->data << std::endl;
+		std::cout << (current)->parent << " " << current->parent->data << std::endl;
+	}
+ 
     cout << endl;
     cout << "Inorder Traversal of Created Tree\n";
     tree.inorder();
@@ -424,6 +434,5 @@ int main()
     cout << "\n\nLevel Order Traversal of Created Tree\n";
     tree.levelOrder();
 	cout << endl;
-	*/
     return 0;
 }

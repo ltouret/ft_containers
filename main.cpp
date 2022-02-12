@@ -5,6 +5,7 @@
 //#include <vector>
 #include <map>
 #include "utils.hpp"
+#include "node.hpp"
 
 namespace ft
 {
@@ -26,11 +27,14 @@ namespace ft
 		//typedef bidirectional_iterator<value_type, const_pointer, const_reference>	const_iterator;
 		//typedef reverse_iterator<const_iterator>									const_reverse_iterator;
 		//typedef reverse_iterator<iterator>											reverse_iterator;
+		typedef Node<value_type>													map_node;
 		typedef std::ptrdiff_t														difference_type;
 		typedef size_t																size_type;
 
 		// add other stuff
 		private:
+		map_node		*_root;
+		map_node		*_end;
 		allocator_type	_alloc;
 		size_type		_size;
 
@@ -91,7 +95,16 @@ int	main()
   mymap[20] = 330;
 
 		// TODO mymap.end() can go backwards.
+		// TODO mymap.begin() -- goes to mymap.end(), then end - 1, etc
 	std::map<int, int>::iterator eit = mymap.end();
+	std::map<int, int>::iterator it = mymap.begin();
+	std::cout << &*it << " " << it->first << " => " << it->second << std::endl;
+	it--;
+	std::cout << &*it << " " << it->first << " => " << it->second << std::endl;
+	it--;
+	std::cout << &*it << " " << it->first << " => " << it->second << std::endl;
+	it--;
+	std::cout << &*it << " " << it->first << " => " << it->second << std::endl;
 	//--eit;
 	std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
   // show content:
@@ -111,7 +124,14 @@ int	main()
 	++eit;
 	std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
 	++eit;
-	std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
+	//std::cout << std::endl;
+	//int i = 0;
+	//while (i < 100)
+	{
+		std::cout << &*eit << " " << eit->first << " => " << eit->second << std::endl;
+		++eit;
+		//i++;
+	}
 	}
 	return 0;
 }
