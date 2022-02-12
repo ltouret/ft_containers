@@ -12,14 +12,19 @@ namespace ft
 	struct Node
 	{
 		// TODO change int val for pair
-		int		val;
 		Pair	value;
 		COLOR	color;
 		Node	*left;
 		Node	*right;
 		Node	*parent;
 
-		Node(int val) : val(val)
+		// TODO maybe add more constructors?
+		Node()
+		{
+			parent = left = right = NULL;
+			color = RED;
+		}
+		Node(int value) : value(value)
 		{
 			parent = left = right = NULL;
 
