@@ -113,11 +113,38 @@ namespace ft
 		}
 
 		// TODO check when this is needed and maybe erase
-		void swapValues(map_node *u, map_node *v) {
-			int temp;
-			temp = u->value;
-			u->value = v->value;
-			v->value = temp;
+		// TODO check leaks here
+		void swapValues(map_node *u, map_node *v)
+		{
+			map_node temp(u->value);
+			temp.parent = u->parent;
+			temp.left = u->left;
+			temp.right = u->right;
+			temp.color = u->color;
+
+			_alloc.destroy(u);
+			_alloc.construct(u, v->value);
+
+			u->parent = temp.parent;
+			u->left = temp.left;
+			u->right = temp.right;
+			u->color = temp.color;
+
+			map_node temp2(v->value);
+			temp2.parent = v->parent;
+			temp2.left = v->left;
+			temp2.right = v->right;
+			temp2.color = v->color;
+
+			_alloc.destroy(v);
+			_alloc.construct(v, temp.value);
+
+			v->parent = temp2.parent;
+			v->left = temp2.left;
+			v->right = temp2.right;
+			v->color = temp2.color;
+
+			std::cout << "v " << v->value.first << " u " << u->value.first << std::endl;
 		}
 
 		// fix red red at given node
@@ -179,85 +206,106 @@ namespace ft
 		}
 
 		// find node that replaces a deleted node in BST
-		map_node *BSTreplace(map_node *x) {
+		map_node *BSTreplace(map_node *x)
+		{
 			// when node have 2 children
 			if (x->left != NULL and x->right != NULL)
-			return successor(x->right);
+				return successor(x->right);
 
 			// when leaf
 			if (x->left == NULL and x->right == NULL)
-			return NULL;
+				return NULL;
 
 			// when single child
 			if (x->left != NULL)
-			return x->left;
+				return x->left;
 			else
-			return x->right;
+				return x->right;
 		}
 
 		// deletes the given node
-		void deletemap_node(map_node *v) {
+		void deletemap_node(map_node *v)
+		{
 			map_node *u = BSTreplace(v);
 
 			// True when u and v are both black
-			bool uvBlack = ((u == NULL or u->color == BLACK) and (v->color == BLACK));
+			bool uvBlack = ((u == NULL || u->color == BLACK) && (v->color == BLACK));
 			map_node *parent = v->parent;
 
-			if (u == NULL) {
-			// u is NULL therefore v is leaf
-			if (v == _root) {
-				// v is _root, making _root null
-				_root = NULL;
-			} else {
-				if (uvBlack) {
-				// u and v both black
-				// v is leaf, fix double black at v
-				fixDoubleBlack(v);
-				} else {
-				// u or v is red
-				if (v->sibling() != NULL)
-					// sibling is not null, make it red"
-					v->sibling()->color = RED;
+			if (u == NULL)
+			{
+				// u is NULL therefore v is leaf
+				if (v == _root)
+				{
+					// v is _root, making _root null
+					_root = NULL;
 				}
+				else
+				{
+					if (uvBlack)
+					{
+						fixDoubleBlack(v);
+						// u and v both black
+						// v is leaf, fix double black at v
+					}
+					else
+					{
+						// u or v is red
+						if (v->sibling() != NULL)
+							v->sibling()->color = RED;
+							// sibling is not null, make it red"
+					}
+					// delete v from the tree
+					if (v->isOnLeft())
+						parent->left = NULL;
+					else
+						parent->right = NULL;
+				}
+				_alloc.destroy(v);
+				_alloc.deallocate(v, 1);
+				_size--;
+				return;
+			}
+			if (v->left == NULL or v->right == NULL)
+			{
+				// TODO the bug is here!!! TODO TODO TODO!
+				// v has 1 child
+				if (v == _root)
+				{
+					// TODO need to find a way to change cosnt val of pair.first in v
+					// v is _root, assign the value of u to v, and delete u
 
-				// delete v from the tree
-				if (v->isOnLeft()) {
-				parent->left = NULL;
-				} else {
-				parent->right = NULL;
+					//v->value = u->value;
+					_alloc.destroy(v);
+					_alloc.deallocate(v, 1);
+					v = u;
+					v->parent = v->left = v->right = NULL;
+					_size--;
 				}
-			}
-			delete v;
-			return;
-			}
-
-			if (v->left == NULL or v->right == NULL) {
-			// v has 1 child
-			if (v == _root) {
-				// v is _root, assign the value of u to v, and delete u
-				v->value = u->value;
-				v->left = v->right = NULL;
-				delete u;
-			} else {
-				// Detach v from tree and move u up
-				if (v->isOnLeft()) {
-				parent->left = u;
-				} else {
-				parent->right = u;
+				else
+				{
+					// Detach v from tree and move u up
+					if (v->isOnLeft())
+						parent->left = u;
+					else
+						parent->right = u;
+					_alloc.destroy(v);
+					_alloc.deallocate(v, 1);
+					_size--;
+					u->parent = parent;
+					if (uvBlack)
+					{
+						// u and v both black, fix double black at u
+						fixDoubleBlack(u);
+					}
+					else
+					{
+						// u or v red, color u black
+						u->color = BLACK;
+					}
 				}
-				delete v;
-				u->parent = parent;
-				if (uvBlack) {
-				// u and v both black, fix double black at u
-				fixDoubleBlack(u);
-				} else {
-				// u or v red, color u black
-				u->color = BLACK;
-				}
+				return;
 			}
-			return;
-			}
-
 			// v has 2 children, swap values with successor and recurse
 			swapValues(u, v);
 			deletemap_node(u);
@@ -376,7 +424,8 @@ namespace ft
 			map_node *temp = _root;
 			while (temp != NULL)
 			{
-				if (key < temp->value.first)
+				// TODO check dis
+				if (_compare(key, temp->value.first))
 				{
 					if (temp->left == NULL)
 						break;
@@ -411,8 +460,6 @@ namespace ft
 		// TODO change return type!
 		void insert(const value_type &val)
 		{
-			//key_compare	compare = key_compare();
-			//map_node	*newmap_node = new map_node(n);
 			if (_root == NULL)
 			{
 				// when _root is null
@@ -426,44 +473,53 @@ namespace ft
 				// TODO update new value of pair (val->second) here!! if elem already exists in map
 				map_node *temp = search(val.first);
 
-				if (temp->value.first == val.first) {
-					// return if value already exists
+				if (!_compare(val.first, temp->value.first) && !_compare(temp->value.first, val.first))
+				{
+					// TODO return if value already exists
+					// TODO here return temp
+					/*
+					The single element versions (1) return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map. The pair::second element in the pair is set to true if a new element was inserted or false if an equivalent key already existed.
+
+					The versions with a hint (2) return an iterator pointing to either the newly inserted element or to the element that already had an equivalent key in the map.
+					*/
+					//std::cout << "YO" << std::endl;
 					return;
-			}
+				}
 
-			// if value is not found, search returns the node
-			// where the value is to be inserted
+				// if value is not found, search returns the node
+				// where the value is to be inserted
 
-			// connect new node to correct node
-			map_node	*newmap_node = new_node(val, temp);
-			//newmap_node->parent = temp;
+				// connect new node to correct node
+				map_node	*newmap_node = new_node(val, temp);
+				//newmap_node->parent = temp;
 
-			if (val.first < temp->value.first)
-				temp->left = newmap_node;
-			else
-				temp->right = newmap_node;
+				if (_compare(val.first, temp->value.first))
+					temp->left = newmap_node;
+				else
+					temp->right = newmap_node;
 
-			// fix red red voilaton if exists
-			fixRedRed(newmap_node);
+				// fix red red voilaton if exists
+				fixRedRed(newmap_node);
 			}
 		}
 
 		// utility function that deletes the node with given value
-		void deleteByVal(int n)
+		int	deleteByVal(const key_type &key)
 		{
 			// Tree is empty
 			if (_root == NULL)
-				return;
+				return (0);
 
-			map_node *v = search(n);
+			map_node *v = search(key);
 
-			if (v->value != n)
+			//if (v->value != n)
+			if (!_compare(key, v->value.first) && !_compare(v->value.first, key))
 			{
-				std::cout << "No node found to delete with value:" << n << std::endl;
-				return;
+				std::cout << "node found to delete" << std::endl;
+				deletemap_node(v);
+				return (1);
 			}
-
-			deletemap_node(v);
+			return (0);
 		}
 
 		public:
@@ -517,14 +573,53 @@ int	main()
 		m.insert(ft::pair<int,int>(60,100));
 		m.insert(ft::pair<int,int>(75,100));
 		m.insert(ft::pair<int,int>(57,100));
-		std::cout << m._root->value.first << std::endl;
+		m.deleteByVal(55);
+		m.levelOrder(m._root);
+		std::cout << std::endl;
+		m.deleteByVal(57);
+		m.levelOrder(m._root);
+		std::cout << std::endl;
+		m.deleteByVal(40);
+		m.levelOrder(m._root);
+		std::cout << std::endl;
+		m.deleteByVal(65);
+		m.levelOrder(m._root);
+		std::cout << std::endl;
+		m.deleteByVal(75);
+		//TODO bug line 271
+		//m.deleteByVal(60);
+		std::cout << m.size() << std::endl;
+		/*
+		std::cout << m._root->value.first << " " << m._root->value.second << std::endl;
 		std::cout << m._root->left->value.first << std::endl;
 		std::cout << m._root->right->value.first << std::endl;
-		//std::cout << m.search(4)->value.first << std::endl;
+		std::cout << m._size << std::endl;
+		*/
+		//std::cout << m.search(55)->value.first << std::endl;
 		m.levelOrder(m._root);
 		std::cout << std::endl;
 		m.inorder(m._root);
 		std::cout << std::endl;
+	}
+	{
+		return 0;
+		// can only change mapped value with iterator or with [] operator and only if ! const
+		std::map<int, int> m;
+		m.insert(std::pair<int,int>(40,100));
+		m.insert(std::pair<int,int>(40,120));
+		std::map<int, int>::iterator it = m.begin();
+		std::cout << it->first << " " << it->second << std::endl;
+		m[40] = 10;
+		std::cout << it->first << " " << it->second << std::endl;
+		it->second = 160;
+		std::cout << it->first << " " << it->second << std::endl;
+		std::cout << m[40] << std::endl; 
+		m.erase(40);
+		m.erase(40);
+		m.erase(40);
+		m.erase(40);
+		m.erase(40);
+		std::cout << m[40] << std::endl; 
 	}
 	return 0;
 }

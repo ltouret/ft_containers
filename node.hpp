@@ -5,13 +5,11 @@
 
 namespace ft
 {
-	//TODO erase comments to start wtih Pair template
 	enum COLOR {RED, BLACK};
 
 	template<class Pair>
 	struct Node
 	{
-		// TODO change int val for pair
 		Pair	value;
 		COLOR	color;
 		Node	*left;
@@ -19,44 +17,52 @@ namespace ft
 		Node	*parent;
 
 		// TODO maybe add more constructors?
-		Node()
+		explicit Node() : value()
 		{
 			parent = left = right = NULL;
 			color = RED;
 		}
+		// TODO why doesnt explicit work here?
 		Node(const Pair &data) : value(data)
 		{
 			parent = left = right = NULL;
 			color = RED;
 		}
 
+		~Node(){};
+
 		// returns pointer to uncle
 		Node *uncle()
 		{
 			// If no parent or grandparent, then no uncle
 			if (parent == NULL or parent->parent == NULL)
-			return NULL;
+				return NULL;
 
 			if (parent->isOnLeft())
 			// uncle on right
-			return parent->parent->right;
+				return parent->parent->right;
 			else
 			// uncle on left
-			return parent->parent->left;
+				return parent->parent->left;
 		}
 
 		// check if node is left child of parent
-		bool isOnLeft() {return this == parent->left;};
+		bool isOnLeft()
+		{
+			if (parent == NULL)
+				return (0);
+			return this == parent->left;
+		}
 
 		// returns pointer to sibling
 		Node *sibling()
 		{
 			// sibling null if no parent
 			if (parent == NULL)
-			return NULL;
+				return NULL;
 
 			if (isOnLeft())
-			return parent->right;
+				return parent->right;
 
 			return parent->left;
 		}
