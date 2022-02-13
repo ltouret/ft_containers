@@ -40,8 +40,17 @@ namespace ft
 		explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()): _root(),  _size(0), _compare(comp), _alloc(alloc)
 		{
 			//initialise_constructor();
+			_end = _alloc.allocate(1);
+			_alloc.construct(_end, value_type());
 		}
 
+		~map()
+		{
+			_alloc.destroy(_end);
+			_alloc.deallocate(_end, 1);
+		}
+
+		// most likely not needed for _root, need to allocate end
 		void initialise_constructor()
 		{
 		_root = _alloc.allocate(1);
@@ -144,7 +153,7 @@ namespace ft
 			v->right = temp2.right;
 			v->color = temp2.color;
 
-			std::cout << "v " << v->value.first << " u " << u->value.first << std::endl;
+			//std::cout << "v " << v->value.first << " u " << u->value.first << std::endl;
 		}
 
 		// fix red red at given node
@@ -196,12 +205,11 @@ namespace ft
 
 		// find node that do not have a left child
 		// in the subtree of the given node
-		map_node *successor(map_node *x) {
+		map_node *successor(map_node *x)
+		{
 			map_node *temp = x;
-
 			while (temp && temp->left != NULL)
-			temp = temp->left;
-
+				temp = temp->left;
 			return temp;
 		}
 
@@ -261,6 +269,7 @@ namespace ft
 					else
 						parent->right = NULL;
 				}
+				//std::cout << "v " << v->value.first<< " u " << u<<" "<< _size << " " << _root << std::endl;
 				_alloc.destroy(v);
 				_alloc.deallocate(v, 1);
 				_size--;
@@ -268,7 +277,7 @@ namespace ft
 			}
 			if (v->left == NULL or v->right == NULL)
 			{
-				// TODO the bug is here!!! TODO TODO TODO!
+				// TODO check leakis in line 286, not deallocations just construt maybe its broken 
 				// v has 1 child
 				if (v == _root)
 				{
@@ -276,11 +285,20 @@ namespace ft
 					// v is _root, assign the value of u to v, and delete u
 
 					//v->value = u->value;
+					//std::cout << "v " << v->value.first << " u " << u->value.first<<" "<< _size << " " << _root->value.first << std::endl;
+					//std::cout << "v " << v->color << " u " << u->color << std::endl;
 					_alloc.destroy(v);
-					_alloc.deallocate(v, 1);
-					v = u;
+					_alloc.construct(v, u->value);
+					_alloc.destroy(u);
+					_alloc.deallocate(u, 1);
+					//_alloc.deallocate(v, 1);
+					v->color = BLACK;
 					v->parent = v->left = v->right = NULL;
+					//v->color = BLACK;
 					_size--;
+					//std::cout << "v " << v->value.first << " u " << u->value.first<<" "<< _size << " " << _root->value.first << std::endl;
+					//std::cout << "v " << v<< " u " << u<<" "<< _size << " " << _root << std::endl;
+					//std::cout << "v " << v->color << " u " << u->color << std::endl;
 				}
 				else
 				{
@@ -388,7 +406,8 @@ namespace ft
 			// push x
 			q.push(x);
 
-			while (!q.empty()) {
+			while (!q.empty())
+			{
 			// while q is not empty
 			// dequeue
 			curr = q.front();
@@ -432,7 +451,7 @@ namespace ft
 					else
 						temp = temp->left;
 				}
-				else if (key == temp->value.first)
+				if (!_compare(key, temp->value.first) && !_compare(temp->value.first, key))
 					break;
 				else
 				{
@@ -467,6 +486,8 @@ namespace ft
 				map_node	*newmap_node = new_node(val, NULL);
 				newmap_node->color = BLACK;
 				_root = newmap_node;
+				_end->parent = _end->maximum(_root);
+				//std::cout << _end->parent->value.first << std::endl;
 			}
 			else
 			{
@@ -500,6 +521,8 @@ namespace ft
 
 				// fix red red voilaton if exists
 				fixRedRed(newmap_node);
+				_end->parent = _end->maximum(_root);
+				//std::cout << _end->parent->value.first << std::endl;
 			}
 		}
 
@@ -515,11 +538,35 @@ namespace ft
 			//if (v->value != n)
 			if (!_compare(key, v->value.first) && !_compare(v->value.first, key))
 			{
-				std::cout << "node found to delete" << std::endl;
+				//std::cout << "node found to delete" << std::endl;
 				deletemap_node(v);
+				_end->parent = _end->maximum(_root);
+				//std::cout << _end->parent->value.first << std::endl;
 				return (1);
 			}
 			return (0);
+		}
+
+		void printHelper(map_node *root, std::string indent, bool last)
+		{
+			if (root != NULL)
+			{
+				std::cout << indent;
+				if (last)
+				{
+					std::cout << "R----";
+					indent += "   ";
+				}
+				else
+				{
+					std::cout << "L----";
+					indent += "|  ";
+				}
+				std::string sColor = root->color ? "BLACK" : "RED";
+				std::cout << root->value.first << "(" << sColor << ")" << std::endl;
+				printHelper(root->left, indent, false);
+				printHelper(root->right, indent, true);
+			}
 		}
 
 		public:
@@ -567,12 +614,36 @@ int	main()
 {
 	{
 		ft::map<int, int> m;
+
 		m.insert(ft::pair<int,int>(55,100));
 		m.insert(ft::pair<int,int>(40,100));
 		m.insert(ft::pair<int,int>(65,100));
 		m.insert(ft::pair<int,int>(60,100));
 		m.insert(ft::pair<int,int>(75,100));
 		m.insert(ft::pair<int,int>(57,100));
+
+		ft::map<int, int>::map_node *current = m._root->minimum(m._root);
+		ft::map<int, int>::map_node *end = m._end;
+
+		//end->parent = NULL;
+		//std::cout << end->successor(end) << std::endl;
+		//std::cout << end->predecessor(end) << std::endl;
+		//TODO if size == 0 end->parent == NULL
+
+		while (current != end)
+		{
+			std::cout << current->value.first << " " << current << std::endl;
+			if (current == current->maximum(m._root))
+			{
+				current = end;
+				break;
+			}
+			current = current->successor(current);
+		}
+
+		m.printHelper(m._root, "", true);
+		m.levelOrder(m._root);
+		std::cout << std::endl;
 		m.deleteByVal(55);
 		m.levelOrder(m._root);
 		std::cout << std::endl;
@@ -586,9 +657,11 @@ int	main()
 		m.levelOrder(m._root);
 		std::cout << std::endl;
 		m.deleteByVal(75);
-		//TODO bug line 271
-		//m.deleteByVal(60);
+		m.levelOrder(m._root);
+		std::cout << std::endl;
+		m.deleteByVal(60);
 		std::cout << m.size() << std::endl;
+		std::cout << m._root->maximum(m._root) << std::endl;
 		/*
 		std::cout << m._root->value.first << " " << m._root->value.second << std::endl;
 		std::cout << m._root->left->value.first << std::endl;
@@ -619,6 +692,15 @@ int	main()
 		m.erase(40);
 		m.erase(40);
 		m.erase(40);
+		it = m.begin();
+		std::map<int, int>::iterator eit = m.end();
+		std::cout << &*it << " " << &* eit << std::endl;
+		m.insert(std::pair<int,int>(40,120));
+		it = m.begin();
+		std::cout << &*it << " " << &* eit << std::endl;
+		it++;
+		std::cout << &*it << std::endl;
+		std::cout << m.size() << std::endl;
 		std::cout << m[40] << std::endl; 
 	}
 	return 0;
