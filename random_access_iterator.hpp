@@ -7,17 +7,18 @@
 
 namespace ft
 {
-	template <typename T>
+	// TODO should this be Class?? 
+	template <class T>
 	class random_access_iterator
 	{
 		public:
+		typedef std::random_access_iterator_tag					iterator_category;
 		typedef random_access_iterator<T>						iterator;
 		typedef random_access_iterator<const T> 				const_iterator;
 		typedef T												value_type;
 		typedef T&												reference;
 		typedef T*												pointer;
 		typedef std::ptrdiff_t									difference_type;
-		typedef std::random_access_iterator_tag					iterator_category;
 
 		protected:
 		pointer													_ptr;

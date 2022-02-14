@@ -370,6 +370,19 @@ int main()
 	//Node *begin = tree._begin->parent;
 	//Node *end = tree._end;
 
+		Node *test = maximum(tree.root);
+		while (test)
+		{
+			std::cout << "HERE " << (test)->data << std::endl;
+			if (predecessor(test) == NULL)
+				break;
+			test = predecessor(test);
+		}
+		std::cout << "HERE " << (test) << std::endl;
+		//std::cout << "HERE " << (test)->data << std::endl;
+		//std::cout << "HERE " << predecessor(test)->data << std::endl;
+		return 0;
+
 	Node *begin = minimum(tree.root);
 	Node *end = tree._end;
 	end->parent = maximum(tree.root);

@@ -7,6 +7,7 @@ namespace ft
 {
 	enum COLOR {RED, BLACK};
 
+	// should this be class or typename?
 	template<class Pair>
 	struct Node
 	{
@@ -105,9 +106,9 @@ namespace ft
 			return node;
 		}
 
-		Node	*successor(Node *x)
+		Node	*successor(void)
 		{
-			Node *tmp = x;
+			Node *tmp = this;
 			if (tmp->right != NULL)
 				return minimum(tmp->right);
 
@@ -120,9 +121,9 @@ namespace ft
 			return y;
 		}
 
-		Node	*predecessor(Node *x)
+		Node	*predecessor(void)
 		{
-			Node *tmp = x;
+			Node *tmp = this;
 			if (tmp->left != NULL)
 				return maximum(tmp->left);
 

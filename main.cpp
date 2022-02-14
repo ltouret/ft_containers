@@ -6,8 +6,10 @@
 #include <map>
 #include "utils.hpp"
 #include "node.hpp"
+#include "bidirectional_iterator.hpp"
 //TODO erase me
 #include <queue>
+#include <vector>
 
 namespace ft
 {
@@ -25,10 +27,11 @@ namespace ft
 		typedef typename allocator_type::const_reference							const_reference;
 		typedef typename allocator_type::pointer									pointer;
 		typedef typename allocator_type::const_pointer								const_pointer;
-		//typedef bidirectional_iterator<value_type, pointer, reference> 			iterator;
-		//typedef bidirectional_iterator<value_type, const_pointer, const_reference>	const_iterator;
-		//typedef reverse_iterator<const_iterator>									const_reverse_iterator;
-		//typedef reverse_iterator<iterator>											reverse_iterator;
+		typedef bidirectional_iterator<key_type, mapped_type>						iterator;
+		typedef bidirectional_iterator<key_type, mapped_type>						const_iterator;
+		// why reverse_iterator<const> before the non const?????
+		typedef reverse_iterator<const_iterator>									const_reverse_iterator;
+		typedef reverse_iterator<iterator>											reverse_iterator;
 		typedef Node<value_type>													map_node;
 		typedef std::ptrdiff_t														difference_type;
 		typedef size_t																size_type;
@@ -590,6 +593,31 @@ namespace ft
 			}
 		};
 
+		iterator		begin(void)
+		{
+			if (!this->size())
+				return (this->end());
+			else
+				return (iterator(_root->minimum(_root), _end));
+		}
+
+		const_iterator	begin(void) const
+		{
+			if (!this->size())
+				return (this->end());
+			else
+				return (const_iterator(_root->minimum(_root), _end));
+		}
+
+		iterator		end(void) {return iterator(_end, _end);}
+		const_iterator	end(void) const {return const_iterator(_end, _end);}
+
+		reverse_iterator		rbegin(void) {return reverse_iterator(end());}
+		const_reverse_iterator	rbegin(void) const {return const_reverse_iterator(end());}
+
+		reverse_iterator		rend(void) {return reverse_iterator(begin());}
+		const_reverse_iterator	rend(void) const {return const_reverse_iterator(begin());}
+
 		allocator_type	get_allocator(void) const
 		{
 			allocator_type cpy_allocator(_alloc);
@@ -622,6 +650,26 @@ int	main()
 		m.insert(ft::pair<int,int>(75,100));
 		m.insert(ft::pair<int,int>(57,100));
 
+		ft::map<int, int>::iterator	it = m.begin();
+		std::cout << m._end << std::endl;
+		while (it != m.end())
+		{
+			std::cout << it->first << std::endl;
+			++it;
+		}
+		std::cout << &*it << std::endl;
+
+		ft::map<int, int>::reverse_iterator	rit = m.rbegin();
+		std::cout << &*rit << std::endl;
+		while (rit != m.rend())
+		{
+			std::cout << rit->first << std::endl;
+			++rit;
+		}
+		std::cout << &*rit << std::endl;
+
+		m.printHelper(m._root, "", true);
+		//return 0;
 		ft::map<int, int>::map_node *current = m._root->minimum(m._root);
 		ft::map<int, int>::map_node *end = m._end;
 
@@ -638,7 +686,7 @@ int	main()
 				current = end;
 				break;
 			}
-			current = current->successor(current);
+			current = current->successor();
 		}
 
 		m.printHelper(m._root, "", true);
@@ -678,8 +726,14 @@ int	main()
 		return 0;
 		// can only change mapped value with iterator or with [] operator and only if ! const
 		std::map<int, int> m;
+		std::map<int, int>::reverse_iterator rit = m.rbegin();
+		std::cout << &*rit << std::endl;
+		std::cout << &*m.end() << std::endl;
 		m.insert(std::pair<int,int>(40,100));
+		//const std::map<int, int> my(m);
 		m.insert(std::pair<int,int>(40,120));
+		//my.find(40)->second = 10;
+		//std::cout << my.find(40)->second << std::endl;
 		std::map<int, int>::iterator it = m.begin();
 		std::cout << it->first << " " << it->second << std::endl;
 		m[40] = 10;

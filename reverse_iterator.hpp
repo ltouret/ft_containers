@@ -43,7 +43,7 @@ namespace ft
 		}
 		iterator_type		base(void) const {return (this->_current);};
 		reference			operator*(void) const {iterator_type tmp = this->base(); return (*--tmp);};
-		pointer				operator->(void) const {iterator_type tmp = this->base(); return (--tmp);};
+		pointer				operator->(void) const {iterator_type tmp = this->base(); return (&*--tmp);};
 		reference			operator[](difference_type n) const {return (this->base()[-n-1]);}
 		reverse_iterator	&operator++(void) {--this->_current; return (*this);};
 		reverse_iterator	operator++(int) {reverse_iterator tmp = *this; --this->_current; return (tmp);};
