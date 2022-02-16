@@ -305,9 +305,9 @@ namespace ft
 					//std::cout << &v->value << std::endl;
 					//std::cout << "v " << v->value.first << " u " << u->value.first <<" "<< _size << " " << _root->value.first << std::endl;
 					//std::cout << "v " << v->color << " u " << u->color << std::endl;
-					map_node	tmp(u->value);
+					value_type	tmp = u->value;
 					_alloc.destroy(u);
-					_alloc.construct(u, tmp.value);
+					_alloc.construct(u, tmp);
 					_alloc.destroy(v);
 					_alloc.deallocate(v, 1);
 					//std::cout << "v " << v->value.first << " u " << u->value.first<<" "<< _size << " " << _root->value.first << std::endl;
@@ -755,6 +755,8 @@ int	main()
 		std::cout << std::endl;
 		m.printHelper(mm._root, "", true);
 		std::cout << mm.size() << std::endl;
+		m.clear();
+		mm.clear();
 
 		/*
 		m.erase(65);

@@ -4,6 +4,8 @@
 
 # TODO map
 
+Need to change swapvalue func to value_type tmp instead of using a map_node
+
 Member functions
 
 (constructor)
