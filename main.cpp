@@ -47,11 +47,24 @@ namespace ft
 			_alloc.construct(_end, value_type());
 		}
 
+	void clearTree(map_node *node)
+	{
+		if (node)
+		{
+			clearTree(node->left);
+			clearTree(node->right);
+			_alloc.destroy(node);
+			_alloc.deallocate(node, 1);
+		}
+	}
+
 		~map()
 		{
 			_alloc.destroy(_end);
 			_alloc.deallocate(_end, 1);
-			std::cout << "bye" << std::endl;
+			if (this->_size)
+				clearTree(_root);
+			//std::cout << "bye" << std::endl;
 		}
 
 		// most likely not needed for _root, need to allocate end
@@ -289,15 +302,22 @@ namespace ft
 					// v is _root, assign the value of u to v, and delete u
 
 					//v->value = u->value;
-					//std::cout << "v " << v->value.first << " u " << u->value.first<<" "<< _size << " " << _root->value.first << std::endl;
+					//std::cout << &v->value << std::endl;
+					//std::cout << "v " << v->value.first << " u " << u->value.first <<" "<< _size << " " << _root->value.first << std::endl;
 					//std::cout << "v " << v->color << " u " << u->color << std::endl;
-					_alloc.destroy(v);
-					_alloc.construct(v, u->value);
+					map_node	tmp(u->value);
 					_alloc.destroy(u);
-					_alloc.deallocate(u, 1);
+					_alloc.construct(u, tmp.value);
+					_alloc.destroy(v);
+					_alloc.deallocate(v, 1);
+					//std::cout << "v " << v->value.first << " u " << u->value.first<<" "<< _size << " " << _root->value.first << std::endl;
 					//_alloc.deallocate(v, 1);
-					v->color = BLACK;
-					v->parent = v->left = v->right = NULL;
+					u->color = BLACK;
+					//std::cout << &_root->value << std::endl;
+					_root = u;
+					//v->parent = v->left = v->right = NULL;
+					//std::cout << &v->value << std::endl;
+					//std::cout << &_root->value << std::endl;
 					//v->color = BLACK;
 					_size--;
 					//std::cout << "v " << v->value.first << " u " << u->value.first<<" "<< _size << " " << _root->value.first << std::endl;
@@ -439,15 +459,11 @@ namespace ft
 
 		map_node *getRoot() { return _root; }
 
-		// searches for given value
-		// if found returns the node (used for delete)
-		// else returns the last node while traversing (used in insert)
 		map_node *search(const key_type &key)
 		{
 			map_node *temp = _root;
 			while (temp != NULL)
 			{
-				// TODO check dis
 				if (_compare(key, temp->value.first))
 				{
 					if (temp->left == NULL)
@@ -455,7 +471,7 @@ namespace ft
 					else
 						temp = temp->left;
 				}
-				if (!_compare(key, temp->value.first) && !_compare(temp->value.first, key))
+				else if (!_compare(key, temp->value.first) && !_compare(temp->value.first, key))
 					break;
 				else
 				{
@@ -479,7 +495,6 @@ namespace ft
 		}
 
 		// inserts the given value to tree
-		// TODO change return type!
 		pair<iterator,bool>	insert(const value_type &val)
 		{
 			map_node	*newmap_node = NULL;
@@ -558,9 +573,11 @@ namespace ft
 			map_node *v = search(key);
 
 			//if (v->value != n)
+			//std::cout << key << " " << v->value.first << std::endl; 
 			if (!_compare(key, v->value.first) && !_compare(v->value.first, key))
 			{
 				//std::cout << "node found to delete" << std::endl;
+				//std::cout << v->value.first << std::endl; 
 				deletemap_node(v);
 				_end->parent = _end->maximum(_root);
 				//std::cout << _end->parent->value.first << std::endl;
@@ -574,15 +591,36 @@ namespace ft
 			while (first != last)
 			{
 				iterator	tmp(first);
-				std::cout << tmp->first << std::endl; 
+				//std::cout << search(tmp->first)->value.first << " " << tmp->first << std::endl; 
 				++first;
+				//std::cout << &*tmp << std::endl;
 				erase(tmp);
+				//printHelper(_root, "", true);
 			}
+		}
+
+		void	swap(map &x)
+		{
+			size_type	tmp_size;
+			map_node	*tmp_root;
+			map_node	*tmp_end;
+
+			tmp_size = this->_size;
+			tmp_root = this->_root;
+			tmp_end = this->_end;
+
+			this->_size = x._size;
+			this->_root = x._root;
+			this->_end = x._end;
+
+			x._size = tmp_size;
+			x._root = tmp_root;
+			x._end = tmp_end;
 		}
 
 		void	clear(void) {erase(begin(), end());};
 
-		void printHelper(map_node *root, std::string indent, bool last)
+		void	printHelper(map_node *root, std::string indent, bool last)
 		{
 			if (root != NULL)
 			{
@@ -674,7 +712,7 @@ int	main()
 {
 	{
 		ft::map<int, int> m;
-		//ft::map<int, int> mm;
+		ft::map<int, int> mm;
 		//ft::map<int, int>::iterator ins;
 
 		//std::cout << (m.insert(dit, ft::pair<int,int>(55,100)))->second << std::endl;
@@ -697,22 +735,39 @@ int	main()
 		m.insert(ft::pair<int,int>(57,100));
 		m[45] = 100;
 
-		m.printHelper(m._root, "", true);
+		//m.printHelper(m._root, "", true);
 		//m.erase(m.begin(), ++m.begin());
 		//m.erase(m.begin());
-		//mm.insert(m.begin(), m.end());
+		mm.insert(m.begin(), ++m.begin());
 		//m.printHelper(mm._root, "", true);
 		//mm.clear();
 		ft::map<int, int>::iterator	dit = m.begin();
 		while (dit != m.end())
 		{
-			//std::cout << dit->first << std::endl;
+			//std::cout << dit->first << " " <<&*dit << std::endl;
 			++dit;
 		}
-		
-		m.clear();
+		std::cout << std::endl;
+
+		m.swap(mm);
 		m.printHelper(m._root, "", true);
 		std::cout << m.size() << std::endl;
+		std::cout << std::endl;
+		m.printHelper(mm._root, "", true);
+		std::cout << mm.size() << std::endl;
+
+		/*
+		m.erase(65);
+		m.erase(75);
+		m.erase(60);
+		m.erase(45);
+		m.erase(55);
+		m.erase(57);
+		m.erase(40);
+		*/
+
+		//m.printHelper(m._root, "", true);
+		//std::cout << m.size() << std::endl;
 		//mm[60] = 100;
 		//m.printHelper(mm._root, "", true);
 

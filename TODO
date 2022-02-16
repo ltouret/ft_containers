@@ -7,7 +7,7 @@
 Member functions
 
 (constructor)
-(destructor)
+#(destructor)
 operator=
 
 #Iterators:
@@ -27,7 +27,7 @@ operator=
 #Modifiers:
 #	insert
 #	erase
-	swap
+#	swap
 #	clear
 
 #Observers:
