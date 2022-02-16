@@ -51,6 +51,7 @@ namespace ft
 		{
 			_alloc.destroy(_end);
 			_alloc.deallocate(_end, 1);
+			std::cout << "bye" << std::endl;
 		}
 
 		// most likely not needed for _root, need to allocate end
@@ -473,24 +474,26 @@ namespace ft
 			_alloc.construct(newNode, val);
 
 			newNode->parent = parent;
-			//return_node = newNode;
 			this->_size++;
 			return newNode;
 		}
 
 		// inserts the given value to tree
 		// TODO change return type!
-		void insert(const value_type &val)
+		pair<iterator,bool>	insert(const value_type &val)
 		{
+			map_node	*newmap_node = NULL;
 			if (_root == NULL)
 			{
 				// when _root is null
 				// simply insert value at _root
-				map_node	*newmap_node = new_node(val, NULL);
+				newmap_node = new_node(val, NULL);
 				newmap_node->color = BLACK;
 				_root = newmap_node;
 				_end->parent = _end->maximum(_root);
+				//std::cout << newmap_node->value.first << _root->value.first << std::endl;
 				//std::cout << _end->parent->value.first << std::endl;
+				//return (ft::make_pair(iterator(newmap_node, _end), true));
 			}
 			else
 			{
@@ -498,23 +501,13 @@ namespace ft
 				map_node *temp = search(val.first);
 
 				if (!_compare(val.first, temp->value.first) && !_compare(temp->value.first, val.first))
-				{
-					// TODO return if value already exists
-					// TODO here return temp
-					/*
-					The single element versions (1) return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map. The pair::second element in the pair is set to true if a new element was inserted or false if an equivalent key already existed.
-
-					The versions with a hint (2) return an iterator pointing to either the newly inserted element or to the element that already had an equivalent key in the map.
-					*/
-					//std::cout << "YO" << std::endl;
-					return;
-				}
+					return (ft::make_pair(iterator(temp, _end), false));
 
 				// if value is not found, search returns the node
 				// where the value is to be inserted
 
 				// connect new node to correct node
-				map_node	*newmap_node = new_node(val, temp);
+				newmap_node = new_node(val, temp);
 				//newmap_node->parent = temp;
 
 				if (_compare(val.first, temp->value.first))
@@ -527,10 +520,36 @@ namespace ft
 				_end->parent = _end->maximum(_root);
 				//std::cout << _end->parent->value.first << std::endl;
 			}
+			return (ft::make_pair(iterator(newmap_node, _end), true));
 		}
 
-		// utility function that deletes the node with given value
-		int	deleteByVal(const key_type &key)
+		iterator	insert(iterator position, const value_type &val)
+		{
+			(void) position;
+			return (insert(val).first);
+		}
+
+		template<class InputIterator>
+		void insert(InputIterator first, InputIterator last)
+		{
+			while (first != last)
+			{
+				insert(*first);
+				++first;
+			}
+		}
+
+		mapped_type	&operator[](const key_type &k)
+		{
+			return ((*((insert(make_pair(k, mapped_type()))).first)).second);
+		}
+
+		void	erase(iterator position)
+		{
+			erase(position->first);
+		}
+
+		size_type	erase(const key_type &key)
 		{
 			// Tree is empty
 			if (_root == NULL)
@@ -549,6 +568,19 @@ namespace ft
 			}
 			return (0);
 		}
+
+		void	erase(iterator first, iterator last)
+		{
+			while (first != last)
+			{
+				iterator	tmp(first);
+				std::cout << tmp->first << std::endl; 
+				++first;
+				erase(tmp);
+			}
+		}
+
+		void	clear(void) {erase(begin(), end());};
 
 		void printHelper(map_node *root, std::string indent, bool last)
 		{
@@ -633,8 +665,8 @@ namespace ft
 				return (false);
 		}
 
-		//key_compare		key_comp(void) const;
-		//value_compare		value_comp(void) const;
+		key_compare key_comp(void) const {return (_compare);}
+		value_compare value_comp(void) const {return (value_compare(_compare));}
 	};
 };
 
@@ -642,13 +674,49 @@ int	main()
 {
 	{
 		ft::map<int, int> m;
+		//ft::map<int, int> mm;
+		//ft::map<int, int>::iterator ins;
 
+		//std::cout << (m.insert(dit, ft::pair<int,int>(55,100)))->second << std::endl;
+		//std::cout << m.insert(ft::pair<int,int>(55,100)).second << std::endl;
+		//std::cout << m.insert(ft::pair<int,int>(55,100)).first->first << std::endl;
+		//std::cout << m.insert(ft::pair<int,int>(55,100)).first->first << std::endl;
+		//std::cout << ins->first << std::endl;
+		m.insert(ft::pair<int,int>(55,100));
+		m.insert(ft::pair<int,int>(55,100));
+		m.insert(ft::pair<int,int>(55,100));
+		m.insert(ft::pair<int,int>(55,100));
+		m.insert(ft::pair<int,int>(55,100));
+		m.insert(ft::pair<int,int>(55,100));
+		m.insert(ft::pair<int,int>(55,100));
 		m.insert(ft::pair<int,int>(55,100));
 		m.insert(ft::pair<int,int>(40,100));
 		m.insert(ft::pair<int,int>(65,100));
 		m.insert(ft::pair<int,int>(60,100));
 		m.insert(ft::pair<int,int>(75,100));
 		m.insert(ft::pair<int,int>(57,100));
+		m[45] = 100;
+
+		m.printHelper(m._root, "", true);
+		//m.erase(m.begin(), ++m.begin());
+		//m.erase(m.begin());
+		//mm.insert(m.begin(), m.end());
+		//m.printHelper(mm._root, "", true);
+		//mm.clear();
+		ft::map<int, int>::iterator	dit = m.begin();
+		while (dit != m.end())
+		{
+			//std::cout << dit->first << std::endl;
+			++dit;
+		}
+		
+		m.clear();
+		m.printHelper(m._root, "", true);
+		std::cout << m.size() << std::endl;
+		//mm[60] = 100;
+		//m.printHelper(mm._root, "", true);
+
+		return 0;
 
 		ft::map<int, int>::iterator	it = m.begin();
 		std::cout << m._end << std::endl;
@@ -670,6 +738,7 @@ int	main()
 
 		m.printHelper(m._root, "", true);
 		//return 0;
+
 		ft::map<int, int>::map_node *current = m._root->minimum(m._root);
 		ft::map<int, int>::map_node *end = m._end;
 
@@ -692,22 +761,22 @@ int	main()
 		m.printHelper(m._root, "", true);
 		m.levelOrder(m._root);
 		std::cout << std::endl;
-		m.deleteByVal(55);
+		m.erase(55);
 		m.levelOrder(m._root);
 		std::cout << std::endl;
-		m.deleteByVal(57);
+		m.erase(57);
 		m.levelOrder(m._root);
 		std::cout << std::endl;
-		m.deleteByVal(40);
+		m.erase(40);
 		m.levelOrder(m._root);
 		std::cout << std::endl;
-		m.deleteByVal(65);
+		m.erase(65);
 		m.levelOrder(m._root);
 		std::cout << std::endl;
-		m.deleteByVal(75);
+		m.erase(75);
 		m.levelOrder(m._root);
 		std::cout << std::endl;
-		m.deleteByVal(60);
+		m.erase(60);
 		std::cout << m.size() << std::endl;
 		std::cout << m._root->maximum(m._root) << std::endl;
 		/*
@@ -717,6 +786,7 @@ int	main()
 		std::cout << m._size << std::endl;
 		*/
 		//std::cout << m.search(55)->value.first << std::endl;
+		m.printHelper(m._root, "", true);
 		m.levelOrder(m._root);
 		std::cout << std::endl;
 		m.inorder(m._root);

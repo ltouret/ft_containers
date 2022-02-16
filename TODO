@@ -10,29 +10,29 @@ Member functions
 (destructor)
 operator=
 
-Iterators:
-	begin
-	end
-	rbegin
-	rend
+#Iterators:
+#	begin
+#	end
+#	rbegin
+#	rend
 
 #Capacity:
 #	empty
 #	size
 #	max_size
 
-Element access:
-	operator[]
+#Element access:
+#	operator[]
 
-Modifiers:
-	insert
-	erase
+#Modifiers:
+#	insert
+#	erase
 	swap
-	clear
+#	clear
 
-Observers:
-	key_comp
-	value_comp
+#Observers:
+#	key_comp
+#	value_comp
 
 Operations:
 	find
