@@ -4,13 +4,11 @@
 
 # TODO map
 
-Need to change swapvalue func to value_type tmp instead of using a map_node
+#Member functions
 
-Member functions
-
-(constructor)
+#(constructor)
 #(destructor)
-operator=
+#operator=
 
 #Iterators:
 #	begin
@@ -36,15 +34,19 @@ operator=
 #	key_comp
 #	value_comp
 
-Operations:
-	find
-	count
-	lower_bound
-	upper_bound
-	equal_range
+#Operations:
+#	find
+#	count
+#	lower_bound
+#	upper_bound
+#	equal_range
 
 #Allocator:
 #	get_allocator
+
+Non-member function overloads
+	relational operators
+	swap
 
 TODO stack
 

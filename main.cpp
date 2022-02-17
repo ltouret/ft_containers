@@ -42,21 +42,36 @@ namespace ft
 		public:
 		explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()): _root(),  _size(0), _compare(comp), _alloc(alloc)
 		{
-			//initialise_constructor();
 			_end = _alloc.allocate(1);
 			_alloc.construct(_end, value_type());
 		}
 
-	void clearTree(map_node *node)
-	{
-		if (node)
+		template <class InputIterator>
+		map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
+		: _root(), _size(0), _compare(comp), _alloc(alloc)
 		{
-			clearTree(node->left);
-			clearTree(node->right);
-			_alloc.destroy(node);
-			_alloc.deallocate(node, 1);
+			_end = _alloc.allocate(1);
+			_alloc.construct(_end, value_type());
+			insert(first, last);
 		}
-	}
+
+		map(const map &x): _root(), _size(0), _compare(x._compare), _alloc(x._alloc)
+		{
+			_end = _alloc.allocate(1);
+			_alloc.construct(_end, value_type());
+			insert(x.begin(), x.end());
+		}
+
+		void clearTree(map_node *node)
+		{
+			if (node)
+			{
+				clearTree(node->left);
+				clearTree(node->right);
+				_alloc.destroy(node);
+				_alloc.deallocate(node, 1);
+			}
+		}
 
 		~map()
 		{
@@ -67,18 +82,12 @@ namespace ft
 			//std::cout << "bye" << std::endl;
 		}
 
-		// most likely not needed for _root, need to allocate end
-		void initialise_constructor()
+		// TOdo check if this works (operator=)
+		map	&operator=(const map &x)
 		{
-		_root = _alloc.allocate(1);
-		_alloc.construct(_root, value_type());
-
-		_end = _alloc.allocate(1);
-		_alloc.construct(_end, value_type());
-
-		_end->parent = _root;
-		_root->left = NULL;
-		_root->right = NULL;
+			tmp(x);
+			this->swap(*this);
+			return (*this);
 		}
 
 		map_node		*_root;
@@ -142,7 +151,7 @@ namespace ft
 		// TODO check leaks here
 		void swapValues(map_node *u, map_node *v)
 		{
-			map_node temp(u->value);
+			map_node	temp(u->value);
 			temp.parent = u->parent;
 			temp.left = u->left;
 			temp.right = u->right;
@@ -156,7 +165,7 @@ namespace ft
 			u->right = temp.right;
 			u->color = temp.color;
 
-			map_node temp2(v->value);
+			map_node	temp2(v->value);
 			temp2.parent = v->parent;
 			temp2.left = v->left;
 			temp2.right = v->right;
@@ -305,11 +314,11 @@ namespace ft
 					//std::cout << &v->value << std::endl;
 					//std::cout << "v " << v->value.first << " u " << u->value.first <<" "<< _size << " " << _root->value.first << std::endl;
 					//std::cout << "v " << v->color << " u " << u->color << std::endl;
+					_alloc.destroy(v);
+					_alloc.deallocate(v, 1);
 					value_type	tmp = u->value;
 					_alloc.destroy(u);
 					_alloc.construct(u, tmp);
-					_alloc.destroy(v);
-					_alloc.deallocate(v, 1);
 					//std::cout << "v " << v->value.first << " u " << u->value.first<<" "<< _size << " " << _root->value.first << std::endl;
 					//_alloc.deallocate(v, 1);
 					u->color = BLACK;
@@ -457,13 +466,93 @@ namespace ft
 			inorder(x->right);
 		}
 
-		map_node *getRoot() { return _root; }
+		iterator	find(const key_type &k)
+		{
+			for (iterator it = this->begin(); it != this->end(); ++it)
+			{
+				if (!_compare(k, it->first) && !_compare(it->first, k))
+					return (it);
+			}
+			return (this->end());
+		}
+
+		const_iterator	find(const key_type &k) const
+		{
+			for (const_iterator it = this->begin(); it != this->end(); ++it)
+			{
+				if (!_compare(k, it->first) && !_compare(it->first, k))
+					return (it);
+			}
+			return (this->end());
+		}
+
+		size_type	count(const key_type &k) const
+		{
+			if (this->find(k) != this->end())
+				return (1);
+			return (0);
+		}
+
+		iterator	lower_bound(const key_type &k)
+		{
+			for (iterator it = this->begin(); it != this->end(); ++it)
+			{
+				if (!_compare(it->first, k))
+					return (it);
+			}
+			return (this->end());
+		}
+
+		const_iterator	lower_bound(const key_type &k) const
+		{
+			for (const_iterator it = this->begin(); it != this->end(); ++it)
+			{
+				if (!_compare(it->first, k))
+					return (it);
+			}
+			return (this->end());
+		}
+
+		iterator	upper_bound(const key_type &k)
+		{
+			for (iterator it = this->begin(); it != this->end(); ++it)
+			{
+				if (_compare(k, it->first))
+					return (it);
+			}
+			return (this->end());
+		}
+
+		const_iterator	upper_bound(const key_type &k) const
+		{
+			for (const_iterator it = this->begin(); it != this->end(); ++it)
+			{
+				if (_compare(k, it->first))
+					return (it);
+			}
+			return (this->end());
+		}
+
+		pair<iterator,iterator>	equal_range(const key_type &k)
+		{
+			iterator	lower = lower_bound(k);
+			iterator	upper = upper_bound(k);
+			return (make_pair(lower, upper));
+		}
+
+		pair<const_iterator,const_iterator>	equal_range(const key_type &k) const
+		{
+			const_iterator	lower = lower_bound(k);
+			const_iterator	upper = upper_bound(k);
+			return (make_pair(lower, upper));
+		}
 
 		map_node *search(const key_type &key)
 		{
 			map_node *temp = _root;
 			while (temp != NULL)
 			{
+				//std::cout<< temp->value.first << std::endl;
 				if (_compare(key, temp->value.first))
 				{
 					if (temp->left == NULL)
@@ -486,12 +575,11 @@ namespace ft
 
 		map_node	*new_node(const value_type &val, map_node *parent)
 		{
-			map_node *newNode = _alloc.allocate(1);
+			map_node	*newNode = _alloc.allocate(1);
 			_alloc.construct(newNode, val);
-
 			newNode->parent = parent;
 			this->_size++;
-			return newNode;
+			return (newNode);
 		}
 
 		// inserts the given value to tree
@@ -713,7 +801,13 @@ int	main()
 	{
 		ft::map<int, int> m;
 		ft::map<int, int> mm;
-		//ft::map<int, int>::iterator ins;
+		//ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> kit;
+		/*
+		ft::pair<ft::map<int, int>::iterator, bool> kit = m.insert(ft::pair<int,int>(55,100));
+		std::cout << kit.first->first << " " << kit.first->second << " " << kit.second << std::endl;
+		kit = m.insert(ft::pair<int,int>(55,100));
+		std::cout << kit.first->first << " " << kit.first->second << " " << kit.second << std::endl;
+		*/
 
 		//std::cout << (m.insert(dit, ft::pair<int,int>(55,100)))->second << std::endl;
 		//std::cout << m.insert(ft::pair<int,int>(55,100)).second << std::endl;
@@ -721,19 +815,21 @@ int	main()
 		//std::cout << m.insert(ft::pair<int,int>(55,100)).first->first << std::endl;
 		//std::cout << ins->first << std::endl;
 		m.insert(ft::pair<int,int>(55,100));
-		m.insert(ft::pair<int,int>(55,100));
-		m.insert(ft::pair<int,int>(55,100));
-		m.insert(ft::pair<int,int>(55,100));
-		m.insert(ft::pair<int,int>(55,100));
-		m.insert(ft::pair<int,int>(55,100));
-		m.insert(ft::pair<int,int>(55,100));
-		m.insert(ft::pair<int,int>(55,100));
 		m.insert(ft::pair<int,int>(40,100));
 		m.insert(ft::pair<int,int>(65,100));
 		m.insert(ft::pair<int,int>(60,100));
 		m.insert(ft::pair<int,int>(75,100));
 		m.insert(ft::pair<int,int>(57,100));
 		m[45] = 100;
+
+
+		ft::map<int, int> m1(m);
+		m1.printHelper(m1._root, "", true);
+		std::cout << m1.size() << std::endl;
+		m.printHelper(m._root, "", true);
+		std::cout << m.size() << std::endl;
+		//std::cout<< m.search(55)->value.first << std::endl;
+		//return 0;
 
 		//m.printHelper(m._root, "", true);
 		//m.erase(m.begin(), ++m.begin());
@@ -768,8 +864,8 @@ int	main()
 		m.erase(40);
 		*/
 
-		//m.printHelper(m._root, "", true);
-		//std::cout << m.size() << std::endl;
+		m.printHelper(m._root, "", true);
+		std::cout << m.size() << std::endl;
 		//mm[60] = 100;
 		//m.printHelper(mm._root, "", true);
 
