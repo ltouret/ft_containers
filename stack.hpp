@@ -25,6 +25,14 @@ namespace ft
 		public:
 		explicit			stack(const container_type &ctnr = container_type()): _c(ctnr) {};
 
+		stack				&operator=(const stack &other)
+		{
+			_c = other._c;
+			return (*this);
+		}
+
+		~stack() {};
+
 		// member funcs
 
 		bool				empty(void) const {return (this->_c.empty());}
@@ -40,6 +48,7 @@ namespace ft
 		{
 			return (lhs._c == rhs._c);
 		}
+
 		friend bool	operator<(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
 		{
 			return (lhs._c < rhs._c);
@@ -51,16 +60,19 @@ namespace ft
 	{
 		return (!(lhs == rhs));
 	}
+
 	template <class T, class Container>
 	bool	operator<=(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
 	{
 		return (!(rhs < lhs));
 	}
+
 	template <class T, class Container>
 	bool	operator>(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
 	{
 		return (rhs < lhs);
 	}
+
 	template <class T, class Container>
 	bool	operator>=(const stack<T,Container> &lhs, const stack<T,Container> &rhs)
 	{

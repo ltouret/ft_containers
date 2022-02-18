@@ -44,9 +44,9 @@
 #Allocator:
 #	get_allocator
 
-Non-member function overloads
-	relational operators
-	swap
+#Non-member function overloads
+#	relational operators
+#	swap
 
 TODO stack
 
@@ -54,6 +54,7 @@ TODO try testers in stack
 
 #(constructor)
 #(destructor)
+#operator=
 
 #Member functions:
 	#empty

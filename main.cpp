@@ -85,8 +85,8 @@ namespace ft
 		// TOdo check if this works (operator=)
 		map	&operator=(const map &x)
 		{
-			tmp(x);
-			this->swap(*this);
+			map	tmp(x);
+			this->swap(tmp);
 			return (*this);
 		}
 
@@ -537,14 +537,14 @@ namespace ft
 		{
 			iterator	lower = lower_bound(k);
 			iterator	upper = upper_bound(k);
-			return (make_pair(lower, upper));
+			return (ft::make_pair(lower, upper));
 		}
 
 		pair<const_iterator,const_iterator>	equal_range(const key_type &k) const
 		{
 			const_iterator	lower = lower_bound(k);
 			const_iterator	upper = upper_bound(k);
-			return (make_pair(lower, upper));
+			return (ft::make_pair(lower, upper));
 		}
 
 		map_node *search(const key_type &key)
@@ -644,7 +644,7 @@ namespace ft
 
 		mapped_type	&operator[](const key_type &k)
 		{
-			return ((*((insert(make_pair(k, mapped_type()))).first)).second);
+			return ((*((insert(ft::make_pair(k, mapped_type()))).first)).second);
 		}
 
 		void	erase(iterator position)
