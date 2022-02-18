@@ -794,6 +794,52 @@ namespace ft
 		key_compare key_comp(void) const {return (_compare);}
 		value_compare value_comp(void) const {return (value_compare(_compare));}
 	};
+
+	// non-member funcs overloads
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool	operator==(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (false);
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool	operator!=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs)
+	{
+		return !(lhs == rhs);
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool	operator<(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs)
+	{
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool	operator<=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs)
+	{
+		return !(lhs > rhs);
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool	operator>(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs)
+	{
+		return (rhs < lhs);
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	bool	operator>=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs)
+	{
+		return !(lhs < rhs);
+	}
+
+	template <class Key, class T, class Compare, class Alloc>
+	void	swap(ft::map<Key,T,Compare,Alloc> &lhs, ft::map<Key,T,Compare,Alloc> &rhs)
+	{
+		lhs.swap(rhs);
+	}
 };
 
 int	main()
@@ -801,8 +847,8 @@ int	main()
 	{
 		ft::map<int, int> m;
 		ft::map<int, int> mm;
-		//ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> kit;
 		/*
+		ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> kit;
 		ft::pair<ft::map<int, int>::iterator, bool> kit = m.insert(ft::pair<int,int>(55,100));
 		std::cout << kit.first->first << " " << kit.first->second << " " << kit.second << std::endl;
 		kit = m.insert(ft::pair<int,int>(55,100));
@@ -822,14 +868,22 @@ int	main()
 		m.insert(ft::pair<int,int>(57,100));
 		m[45] = 100;
 
-
 		ft::map<int, int> m1(m);
+
 		m1.printHelper(m1._root, "", true);
 		std::cout << m1.size() << std::endl;
 		m.printHelper(m._root, "", true);
 		std::cout << m.size() << std::endl;
-		//std::cout<< m.search(55)->value.first << std::endl;
-		//return 0;
+		std::cout << std::endl;
+
+		std::cout << (m == m1) << std::endl;
+		std::cout << (m != m1) << std::endl;
+		std::cout << (m < m1) << std::endl;
+		std::cout << (m <= m1) << std::endl;
+		std::cout << (m > m1) << std::endl;
+		std::cout << (m >= m1) << std::endl;
+
+		return 0;
 
 		//m.printHelper(m._root, "", true);
 		//m.erase(m.begin(), ++m.begin());
