@@ -676,13 +676,29 @@ namespace ft
 
 		void	erase(iterator first, iterator last)
 		{
-			while (first != last)
+			//std::cout << (first)->first << " " << (last)->first << std::endl;
+			size_type	len = 0;
+			iterator	tmp(first);
+			key_type	key;
+			while (tmp != last)
 			{
-				iterator	tmp(first);
+				len++;
+				tmp++;
+			}
+			while (len--)
+			{
+				tmp = (first);
+				//std::cout << &*tmp << " " << tmp->first << std::endl;
+				//std::cout << &*first << " " << first->first << std::endl;
 				//std::cout << search(tmp->first)->value.first << " " << tmp->first << std::endl; 
 				++first;
+				key = first->first;
 				//std::cout << &*tmp << std::endl;
+				//std::cout << &*first << " " << key << std::endl;
 				erase(tmp);
+				first = find(key);
+				//std::cout << &*tmp << " " << tmp->first << std::endl;
+				//std::cout << &*first << " " << first->first << std::endl;
 				//printHelper(_root, "", true);
 			}
 		}
@@ -842,9 +858,39 @@ namespace ft
 	}
 };
 
+template< class T >
+void	display( T map, std::string keyType, std::string valueType ) {
+			
+	std::cout << std::endl << "[+] map<" << keyType << "," << valueType << "> content: " << std::endl << std::endl << "{ ";
+
+	typename T::iterator	it, ite = map.end();
+	for (it = map.begin(); it != ite; it++)
+		std::cout << it->first << ":" << it->second << " ";
+
+	std::cout << "}" << std::endl << std::endl;
+}
+
 int	main()
 {
 	{
+		{
+			ft::map<int, std::string> map;
+			std::string arrayS[] = {"zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix"};
+
+
+			for (int i = 0; i < 11; i++)
+				map[i] = arrayS[i];
+
+			//map.erase(0);
+			//map.erase(10);
+			map.printHelper(map._root, "", true);
+			//std::cout << (++map.begin())->first << " " << (--map.end())->first << std::endl;
+			map.erase(++map.begin(), --map.end());
+			display(map, "int", "std::string");
+			//checkSize(map, keyType, valueType)
+		}
+
+		return 0;
 		ft::map<int, int> m;
 		ft::map<int, int> mm;
 		/*
@@ -883,7 +929,7 @@ int	main()
 		std::cout << (m > m1) << std::endl;
 		std::cout << (m >= m1) << std::endl;
 
-		return 0;
+		//return 0;
 
 		//m.printHelper(m._root, "", true);
 		//m.erase(m.begin(), ++m.begin());
