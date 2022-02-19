@@ -236,9 +236,13 @@ namespace ft
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator first, InputIterator last)
 		{
-			int	n = last - first;
-			if (n < 0)
-				n = 0;
+			size_type		n = 0;
+			InputIterator	tmp(first);
+			while (tmp != last)
+			{
+				tmp++;
+				n++;
+			}
 			this->clear();
 			this->reserve(n);
 			for (; first != last; ++first)
@@ -330,7 +334,13 @@ namespace ft
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		insert(iterator position, InputIterator first, InputIterator last)
 		{
-			size_type	n = last - first;
+			size_type		n = 0;
+			InputIterator	tmp(first);
+			while (tmp != last)
+			{
+				tmp++;
+				n++;
+			}
 			if (this->_size + n > this->_capacity)
 			{
 				size_type	backup = position - this->begin();

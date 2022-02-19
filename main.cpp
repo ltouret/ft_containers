@@ -874,6 +874,23 @@ int	main()
 {
 	{
 		{
+			ft::vector<int> v;
+
+			v.push_back(1);
+			v.push_back(2);
+			v.push_back(3);
+			v.push_back(4);
+			ft::vector<int>::iterator it = v.begin();;
+			ft::vector<int>::const_iterator ite = v.end();;
+			while (it != ite)
+			{
+				std::cout << *it << std::endl;
+				//std::cout << *ite << std::endl;
+				it++;
+			}
+			return 0;
+		}
+		{
 			ft::map<int, std::string> map;
 			std::string arrayS[] = {"zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix"};
 

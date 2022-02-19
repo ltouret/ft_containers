@@ -40,8 +40,13 @@ namespace ft
 
 		// member functions
 
-		bool					operator==(const random_access_iterator &to_cmp) const {return (this->_ptr == to_cmp._ptr);}
-		bool					operator!=(const random_access_iterator &to_cmp) const {return (this->_ptr != to_cmp._ptr);}
+		bool					operator==(const const_iterator &to_cmp) const {return (this->_ptr == to_cmp.getPtr());}
+		bool					operator!=(const const_iterator &to_cmp) const
+		{
+			return (this->_ptr != to_cmp.getPtr());
+		}
+
+		pointer					getPtr(void) const {return (this->_ptr);}
 
 		reference				operator*(void) const {return (*this->_ptr);}
 		pointer					operator->(void) const {return (this->_ptr);}
@@ -87,26 +92,26 @@ namespace ft
 			tmp -= n;
 			return (tmp);
 		}
-		difference_type			operator-(const random_access_iterator &src) const
+		difference_type			operator-(const const_iterator &src) const
 		{
-			return (this->_ptr - src._ptr);
+			return (this->_ptr - src.getPtr());
 		}
 
-		bool					operator<(const random_access_iterator &to_cmp) const
+		bool					operator<(const const_iterator &to_cmp) const
 		{
-			return (this->_ptr < to_cmp._ptr);
+			return (this->_ptr < to_cmp.getPtr());
 		}
-		bool					operator>(const random_access_iterator &to_cmp) const
+		bool					operator>(const const_iterator &to_cmp) const
 		{
-			return (this->_ptr > to_cmp._ptr);
+			return (this->_ptr > to_cmp.getPtr());
 		}
-		bool					operator<=(const random_access_iterator &to_cmp) const
+		bool					operator<=(const const_iterator &to_cmp) const
 		{
-			return (this->_ptr <= to_cmp._ptr);
+			return (this->_ptr <= to_cmp.getPtr());
 		}
-		bool					operator>=(const random_access_iterator &to_cmp) const
+		bool					operator>=(const const_iterator &to_cmp) const
 		{
-			return (this->_ptr >= to_cmp._ptr);
+			return (this->_ptr >= to_cmp.getPtr());
 		}
 
 		random_access_iterator	operator+=(difference_type n)
