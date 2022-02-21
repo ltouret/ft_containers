@@ -28,10 +28,10 @@ namespace ft
 		typedef size_t											size_type;
 
 		private:
-		size_type				_size;
-		size_type				_capacity;
-		allocator_type			_alloc;
-		pointer					_array;
+		size_type												_size;
+		size_type												_capacity;
+		allocator_type											_alloc;
+		pointer													_array;
 
 		// constructor
 

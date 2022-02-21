@@ -21,8 +21,9 @@
 #	size
 #	max_size
 
-#Element access:
+Element access:
 #	operator[]
+	at
 
 #Modifiers:
 #	insert

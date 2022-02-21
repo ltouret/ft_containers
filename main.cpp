@@ -27,8 +27,8 @@ namespace ft
 		typedef typename allocator_type::const_reference							const_reference;
 		typedef typename allocator_type::pointer									pointer;
 		typedef typename allocator_type::const_pointer								const_pointer;
-		typedef bidirectional_iterator<key_type, mapped_type>						iterator;
-		typedef bidirectional_iterator<key_type, mapped_type>						const_iterator;
+		typedef ft::bidirectional_iterator<value_type>						iterator;
+		typedef ft::const_bidirectional_iterator<value_type>						const_iterator;
 		// why reverse_iterator<const> before the non const?????
 		typedef reverse_iterator<const_iterator>									const_reverse_iterator;
 		typedef reverse_iterator<iterator>											reverse_iterator;
@@ -652,6 +652,23 @@ namespace ft
 			erase(position->first);
 		}
 
+		/*
+		reference		at(size_type n)
+		{
+			if (n >= this->_size)
+				throw std::out_of_range("_M_range_check\n");
+			reference	r = *(this->_array + n);
+			return (r);
+		}
+		const_reference	at(size_type n) const
+		{
+			if (n >= this->_size)
+				throw std::out_of_range("_M_range_check\n");
+			const_reference	r = *(this->_array + n);
+			return (r);
+		}
+		*/
+
 		size_type	erase(const key_type &key)
 		{
 			// Tree is empty
@@ -870,44 +887,57 @@ void	display( T map, std::string keyType, std::string valueType ) {
 	std::cout << "}" << std::endl << std::endl;
 }
 
+// TODO at
 int	main()
 {
 	{
+		if (false)
 		{
-			ft::vector<int> v;
+			ft::vector<int> v(5);
 
-			v.push_back(1);
-			v.push_back(2);
-			v.push_back(3);
-			v.push_back(4);
-			ft::vector<int>::iterator it = v.begin();;
-			ft::vector<int>::const_iterator ite = v.end();;
+			ft::vector<int>::iterator it = v.begin();
+			ft::vector<int>::const_iterator ite = v.end();
 			while (it != ite)
 			{
+				//*it = 5;
 				std::cout << *it << std::endl;
 				//std::cout << *ite << std::endl;
 				it++;
 			}
-			return 0;
+			//return 0;
 		}
 		{
-			ft::map<int, std::string> map;
-			std::string arrayS[] = {"zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix"};
+			const ft::map<int, int> map;
+			//std::string arrayS[] = {"zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix"};
 
-
-			for (int i = 0; i < 11; i++)
-				map[i] = arrayS[i];
+		map.insert(ft::pair<int,int>(55,100));
+		map.insert(ft::pair<int,int>(40,100));
+		map.insert(ft::pair<int,int>(65,100));
+		map.insert(ft::pair<int,int>(60,100));
+		map.insert(ft::pair<int,int>(75,100));
+		map.insert(ft::pair<int,int>(57,100));
 
 			//map.erase(0);
 			//map.erase(10);
-			map.printHelper(map._root, "", true);
+			//map.printHelper(map._root, "", true);
 			//std::cout << (++map.begin())->first << " " << (--map.end())->first << std::endl;
-			map.erase(++map.begin(), --map.end());
-			display(map, "int", "std::string");
+			//std::map<int, std::string>::const_iterator it = map.begin();
+			ft::map<int, int>::const_iterator it = map.begin();
+			while (it != map.end())
+			{
+				std::cout << it->first << " " << it->second << std::endl;
+				//std::cout << *it << std::endl;
+				//map[it->first] = 123;
+				//it->second = "yo";
+				it++;
+			}
+			//std::cout << map.at(0)<< std::endl;;
+			//map.erase(++map.begin(), --map.end());
+			//display(map, "int", "std::string");
 			//checkSize(map, keyType, valueType)
+			return 0;
 		}
 
-		return 0;
 		ft::map<int, int> m;
 		ft::map<int, int> mm;
 		/*
