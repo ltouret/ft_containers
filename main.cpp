@@ -633,7 +633,7 @@ namespace ft
 		}
 
 		template<class InputIterator>
-		void insert(InputIterator first, InputIterator last)
+		void		insert(InputIterator first, InputIterator last)
 		{
 			while (first != last)
 			{
@@ -652,22 +652,21 @@ namespace ft
 			erase(position->first);
 		}
 
-		/*
-		reference		at(size_type n)
+		mapped_type			&at(const key_type& k)
 		{
-			if (n >= this->_size)
+			iterator	elem = this->find(k);
+			if (elem == this->end())
 				throw std::out_of_range("_M_range_check\n");
-			reference	r = *(this->_array + n);
-			return (r);
+			return (elem->second);
 		}
-		const_reference	at(size_type n) const
+
+		const mapped_type	&at(const key_type& k) const
 		{
-			if (n >= this->_size)
+			const_iterator	elem = this->find(k);
+			if (elem == this->end())
 				throw std::out_of_range("_M_range_check\n");
-			const_reference	r = *(this->_array + n);
-			return (r);
+			return (elem->second);
 		}
-		*/
 
 		size_type	erase(const key_type &key)
 		{
@@ -907,21 +906,22 @@ int	main()
 			//return 0;
 		}
 		{
-			const ft::map<int, int> map;
+			ft::map<int, int> map;
 			//std::string arrayS[] = {"zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix"};
 
-		map.insert(ft::pair<int,int>(55,100));
-		map.insert(ft::pair<int,int>(40,100));
-		map.insert(ft::pair<int,int>(65,100));
-		map.insert(ft::pair<int,int>(60,100));
-		map.insert(ft::pair<int,int>(75,100));
-		map.insert(ft::pair<int,int>(57,100));
+			map.insert(ft::pair<int,int>(55,100));
+			map.insert(ft::pair<int,int>(40,100));
+			map.insert(ft::pair<int,int>(65,100));
+			map.insert(ft::pair<int,int>(60,100));
+			map.insert(ft::pair<int,int>(75,100));
+			map.insert(ft::pair<int,int>(57,100));
 
 			//map.erase(0);
 			//map.erase(10);
 			//map.printHelper(map._root, "", true);
 			//std::cout << (++map.begin())->first << " " << (--map.end())->first << std::endl;
 			//std::map<int, std::string>::const_iterator it = map.begin();
+			std::cout << map.at(55) << std::endl;
 			ft::map<int, int>::const_iterator it = map.begin();
 			while (it != map.end())
 			{
