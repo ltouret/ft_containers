@@ -1,15 +1,16 @@
-#include "stack.hpp"
-#include "vector.hpp"
+// TODO fix tabs, format!
 
-//#include <stack>
-//#include <vector>
-#include <map>
+#ifndef MAP_HPP
+# define MAP_HPP
+
+// why???
+//TODO erase me
+#include <iostream>
+
 #include "utils.hpp"
 #include "node.hpp"
 #include "bidirectional_iterator.hpp"
-//TODO erase me
-#include <queue>
-#include <vector>
+#include "reverse_iterator.hpp"
 
 namespace ft
 {
@@ -27,11 +28,11 @@ namespace ft
 		typedef typename allocator_type::const_reference							const_reference;
 		typedef typename allocator_type::pointer									pointer;
 		typedef typename allocator_type::const_pointer								const_pointer;
-		typedef ft::bidirectional_iterator<value_type>						iterator;
+		typedef ft::bidirectional_iterator<value_type>								iterator;
 		typedef ft::const_bidirectional_iterator<value_type>						const_iterator;
 		// why reverse_iterator<const> before the non const?????
-		typedef reverse_iterator<const_iterator>									const_reverse_iterator;
-		typedef reverse_iterator<iterator>											reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>									const_reverse_iterator;
+		typedef ft::reverse_iterator<iterator>											reverse_iterator;
 		typedef Node<value_type>													map_node;
 		typedef std::ptrdiff_t														difference_type;
 		typedef size_t																size_type;
@@ -423,37 +424,6 @@ namespace ft
 					parent->color = BLACK;
 				}
 			}
-			}
-		}
-
-		// prints level order for given node
-		void levelOrder(map_node *x) {
-			if (x == NULL)
-			// return if node is null
-			return;
-
-			// queue for level order
-			std::queue<map_node *> q;
-			map_node *curr;
-
-			// push x
-			q.push(x);
-
-			while (!q.empty())
-			{
-			// while q is not empty
-			// dequeue
-			curr = q.front();
-			q.pop();
-
-			// print node value
-			std::cout << curr->value.first << " ";
-
-			// push children to queue
-			if (curr->left != NULL)
-				q.push(curr->left);
-			if (curr->right != NULL)
-				q.push(curr->right);
 			}
 		}
 
@@ -886,246 +856,4 @@ void	display( T map, std::string keyType, std::string valueType ) {
 	std::cout << "}" << std::endl << std::endl;
 }
 
-// TODO at
-int	main()
-{
-	{
-		if (false)
-		{
-			ft::vector<int> v(5);
-
-			ft::vector<int>::iterator it = v.begin();
-			ft::vector<int>::const_iterator ite = v.end();
-			while (it != ite)
-			{
-				//*it = 5;
-				std::cout << *it << std::endl;
-				//std::cout << *ite << std::endl;
-				it++;
-			}
-			//return 0;
-		}
-		{
-			ft::map<int, int> map;
-			//std::string arrayS[] = {"zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix"};
-
-			map.insert(ft::pair<int,int>(55,100));
-			map.insert(ft::pair<int,int>(40,100));
-			map.insert(ft::pair<int,int>(65,100));
-			map.insert(ft::pair<int,int>(60,100));
-			map.insert(ft::pair<int,int>(75,100));
-			map.insert(ft::pair<int,int>(57,100));
-
-			//map.erase(0);
-			//map.erase(10);
-			//map.printHelper(map._root, "", true);
-			//std::cout << (++map.begin())->first << " " << (--map.end())->first << std::endl;
-			//std::map<int, std::string>::const_iterator it = map.begin();
-			std::cout << map.at(55) << std::endl;
-			ft::map<int, int>::const_iterator it = map.begin();
-			while (it != map.end())
-			{
-				std::cout << it->first << " " << it->second << std::endl;
-				//std::cout << *it << std::endl;
-				//map[it->first] = 123;
-				//it->second = "yo";
-				it++;
-			}
-			//std::cout << map.at(0)<< std::endl;;
-			//map.erase(++map.begin(), --map.end());
-			//display(map, "int", "std::string");
-			//checkSize(map, keyType, valueType)
-			return 0;
-		}
-
-		ft::map<int, int> m;
-		ft::map<int, int> mm;
-		/*
-		ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> kit;
-		ft::pair<ft::map<int, int>::iterator, bool> kit = m.insert(ft::pair<int,int>(55,100));
-		std::cout << kit.first->first << " " << kit.first->second << " " << kit.second << std::endl;
-		kit = m.insert(ft::pair<int,int>(55,100));
-		std::cout << kit.first->first << " " << kit.first->second << " " << kit.second << std::endl;
-		*/
-
-		//std::cout << (m.insert(dit, ft::pair<int,int>(55,100)))->second << std::endl;
-		//std::cout << m.insert(ft::pair<int,int>(55,100)).second << std::endl;
-		//std::cout << m.insert(ft::pair<int,int>(55,100)).first->first << std::endl;
-		//std::cout << m.insert(ft::pair<int,int>(55,100)).first->first << std::endl;
-		//std::cout << ins->first << std::endl;
-		m.insert(ft::pair<int,int>(55,100));
-		m.insert(ft::pair<int,int>(40,100));
-		m.insert(ft::pair<int,int>(65,100));
-		m.insert(ft::pair<int,int>(60,100));
-		m.insert(ft::pair<int,int>(75,100));
-		m.insert(ft::pair<int,int>(57,100));
-		m[45] = 100;
-
-		ft::map<int, int> m1(m);
-
-		m1.printHelper(m1._root, "", true);
-		std::cout << m1.size() << std::endl;
-		m.printHelper(m._root, "", true);
-		std::cout << m.size() << std::endl;
-		std::cout << std::endl;
-
-		std::cout << (m == m1) << std::endl;
-		std::cout << (m != m1) << std::endl;
-		std::cout << (m < m1) << std::endl;
-		std::cout << (m <= m1) << std::endl;
-		std::cout << (m > m1) << std::endl;
-		std::cout << (m >= m1) << std::endl;
-
-		//return 0;
-
-		//m.printHelper(m._root, "", true);
-		//m.erase(m.begin(), ++m.begin());
-		//m.erase(m.begin());
-		mm.insert(m.begin(), ++m.begin());
-		//m.printHelper(mm._root, "", true);
-		//mm.clear();
-		ft::map<int, int>::iterator	dit = m.begin();
-		while (dit != m.end())
-		{
-			//std::cout << dit->first << " " <<&*dit << std::endl;
-			++dit;
-		}
-		std::cout << std::endl;
-
-		m.swap(mm);
-		m.printHelper(m._root, "", true);
-		std::cout << m.size() << std::endl;
-		std::cout << std::endl;
-		m.printHelper(mm._root, "", true);
-		std::cout << mm.size() << std::endl;
-		m.clear();
-		mm.clear();
-
-		/*
-		m.erase(65);
-		m.erase(75);
-		m.erase(60);
-		m.erase(45);
-		m.erase(55);
-		m.erase(57);
-		m.erase(40);
-		*/
-
-		m.printHelper(m._root, "", true);
-		std::cout << m.size() << std::endl;
-		//mm[60] = 100;
-		//m.printHelper(mm._root, "", true);
-
-		return 0;
-
-		ft::map<int, int>::iterator	it = m.begin();
-		std::cout << m._end << std::endl;
-		while (it != m.end())
-		{
-			std::cout << it->first << std::endl;
-			++it;
-		}
-		std::cout << &*it << std::endl;
-
-		ft::map<int, int>::reverse_iterator	rit = m.rbegin();
-		std::cout << &*rit << std::endl;
-		while (rit != m.rend())
-		{
-			std::cout << rit->first << std::endl;
-			++rit;
-		}
-		std::cout << &*rit << std::endl;
-
-		m.printHelper(m._root, "", true);
-		//return 0;
-
-		ft::map<int, int>::map_node *current = m._root->minimum(m._root);
-		ft::map<int, int>::map_node *end = m._end;
-
-		//end->parent = NULL;
-		//std::cout << end->successor(end) << std::endl;
-		//std::cout << end->predecessor(end) << std::endl;
-		//TODO if size == 0 end->parent == NULL
-
-		while (current != end)
-		{
-			std::cout << current->value.first << " " << current << std::endl;
-			if (current == current->maximum(m._root))
-			{
-				current = end;
-				break;
-			}
-			current = current->successor();
-		}
-
-		m.printHelper(m._root, "", true);
-		m.levelOrder(m._root);
-		std::cout << std::endl;
-		m.erase(55);
-		m.levelOrder(m._root);
-		std::cout << std::endl;
-		m.erase(57);
-		m.levelOrder(m._root);
-		std::cout << std::endl;
-		m.erase(40);
-		m.levelOrder(m._root);
-		std::cout << std::endl;
-		m.erase(65);
-		m.levelOrder(m._root);
-		std::cout << std::endl;
-		m.erase(75);
-		m.levelOrder(m._root);
-		std::cout << std::endl;
-		m.erase(60);
-		std::cout << m.size() << std::endl;
-		std::cout << m._root->maximum(m._root) << std::endl;
-		/*
-		std::cout << m._root->value.first << " " << m._root->value.second << std::endl;
-		std::cout << m._root->left->value.first << std::endl;
-		std::cout << m._root->right->value.first << std::endl;
-		std::cout << m._size << std::endl;
-		*/
-		//std::cout << m.search(55)->value.first << std::endl;
-		m.printHelper(m._root, "", true);
-		m.levelOrder(m._root);
-		std::cout << std::endl;
-		m.inorder(m._root);
-		std::cout << std::endl;
-	}
-	{
-		return 0;
-		// can only change mapped value with iterator or with [] operator and only if ! const
-		std::map<int, int> m;
-		std::map<int, int>::reverse_iterator rit = m.rbegin();
-		std::cout << &*rit << std::endl;
-		std::cout << &*m.end() << std::endl;
-		m.insert(std::pair<int,int>(40,100));
-		//const std::map<int, int> my(m);
-		m.insert(std::pair<int,int>(40,120));
-		//my.find(40)->second = 10;
-		//std::cout << my.find(40)->second << std::endl;
-		std::map<int, int>::iterator it = m.begin();
-		std::cout << it->first << " " << it->second << std::endl;
-		m[40] = 10;
-		std::cout << it->first << " " << it->second << std::endl;
-		it->second = 160;
-		std::cout << it->first << " " << it->second << std::endl;
-		std::cout << m[40] << std::endl; 
-		m.erase(40);
-		m.erase(40);
-		m.erase(40);
-		m.erase(40);
-		m.erase(40);
-		it = m.begin();
-		std::map<int, int>::iterator eit = m.end();
-		std::cout << &*it << " " << &* eit << std::endl;
-		m.insert(std::pair<int,int>(40,120));
-		it = m.begin();
-		std::cout << &*it << " " << &* eit << std::endl;
-		it++;
-		std::cout << &*it << std::endl;
-		std::cout << m.size() << std::endl;
-		std::cout << m[40] << std::endl; 
-	}
-	return 0;
-}
+#endif
