@@ -11,56 +11,67 @@ namespace ft
 	{
 		static const bool value = false;
 	};
+
 	template <>
 	struct	is_integral<bool>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<char>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<unsigned char>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<int>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<unsigned int>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<long>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<long unsigned>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<short>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<short unsigned>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<long long>
 	{
 		static const bool value = true;
 	};
+
 	template <>
 	struct	is_integral<long long unsigned>
 	{
@@ -71,6 +82,7 @@ namespace ft
 	struct	enable_if
 	{
 	};
+
 	template <class T>
 	struct	enable_if<true, T>
 	{
@@ -89,6 +101,9 @@ namespace ft
 		}
 		return (true);
 	}
+
+	// Equal
+
 	template <class InputIterator1, class InputIterator2, class BinaryPredicate>
 	bool	equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate pred)
 	{
@@ -101,6 +116,8 @@ namespace ft
 		}
 		return (true);
 	}
+
+	// Lexicographical compare
 
 	template <class InputIterator1, class InputIterator2>
 	bool	lexicographical_compare(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
@@ -116,6 +133,7 @@ namespace ft
 		}
 		return (first2 != last2);
 	}
+
 	template <class InputIterator1, class InputIterator2, class Compare>
 	bool	lexicographical_compare (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, Compare comp)
 	{
@@ -148,10 +166,10 @@ namespace ft
 
 		pair(const first_type &a, const second_type &b) : first(a), second(b) {};
 
-		template<class U, class V>
-		pair(const pair<U,V> &pr) : first(pr.first), second(pr.second) {};
-
 		// TODO dis is useless
+		template<class U, class V>
+		pair(const pair<U, V> &pr) : first(pr.first), second(pr.second) {};
+
 		pair	&operator=(const pair &pr)
 		{
 			first = pr.first;
@@ -160,7 +178,6 @@ namespace ft
 		}
 	};
 
-	// TODO add ft?
 	template <class T1, class T2>
 	ft::pair<T1,T2>	make_pair(T1 x, T2 y) {return (ft::pair<T1,T2>(x,y));};
 

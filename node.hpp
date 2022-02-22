@@ -1,13 +1,12 @@
 #ifndef NODE_HPP
 # define NODE_HPP
 
-#include <iostream>
+//#include <iostream>
 
 namespace ft
 {
 	enum COLOR {RED, BLACK};
 
-	// should this be class or typename?
 	template<class Pair>
 	struct Node
 	{
@@ -17,13 +16,12 @@ namespace ft
 		Node	*right;
 		Node	*parent;
 
-		// TODO maybe add more constructors?
 		explicit Node() : value()
 		{
 			parent = left = right = NULL;
 			color = RED;
 		}
-		// TODO why doesnt explicit work here?
+
 		Node(const Pair &data) : value(data)
 		{
 			parent = left = right = NULL;
@@ -32,33 +30,26 @@ namespace ft
 
 		~Node(){};
 
-		// returns pointer to uncle
-		Node *uncle()
+		Node	*uncle(void)
 		{
-			// If no parent or grandparent, then no uncle
 			if (parent == NULL or parent->parent == NULL)
 				return NULL;
 
 			if (parent->isOnLeft())
-			// uncle on right
 				return parent->parent->right;
 			else
-			// uncle on left
 				return parent->parent->left;
 		}
 
-		// check if node is left child of parent
-		bool isOnLeft()
+		bool	isOnLeft(void)
 		{
 			if (parent == NULL)
 				return (0);
 			return this == parent->left;
 		}
 
-		// returns pointer to sibling
-		Node *sibling()
+		Node	*sibling(void)
 		{
-			// sibling null if no parent
 			if (parent == NULL)
 				return NULL;
 
@@ -68,8 +59,7 @@ namespace ft
 			return parent->left;
 		}
 
-		// moves node down and moves given node in its place
-		void moveDown(Node *nParent)
+		void	moveDown(Node *nParent)
 		{
 			if (parent != NULL)
 			{
@@ -82,13 +72,13 @@ namespace ft
 			parent = nParent;
 		}
 
-		bool hasRedChild()
+		bool	hasRedChild(void)
 		{
 			return (left != NULL and left->color == RED) ||
 				(right != NULL and right->color == RED);
 		}
 
-		Node *minimum(Node *node)
+		Node	*minimum(Node *node)
 		{
 			if (!node)
 				return NULL;
@@ -97,7 +87,7 @@ namespace ft
 			return node;
 		}
 
-		Node *maximum(Node *node)
+		Node	*maximum(Node *node)
 		{
 			if (!node)
 				return NULL;
