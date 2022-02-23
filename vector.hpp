@@ -99,6 +99,35 @@ namespace ft
 
 		size_type		max_size(void) const {return (this->_alloc.max_size());}
 
+		void			resize(size_type n, value_type val = value_type())
+		{
+			if (n < this->_size)
+			{
+				for (size_type i = n; i < this->_size; ++i)
+					this->_alloc.destroy(&this->_array[i]);
+				this->_size = n;
+			}
+			else if (n > this->_size)
+			{
+				if (n > this->_capacity)
+				{
+					if (this->_capacity == 0)
+						reserve(n);
+					else
+					{
+						if (this->_size * 2 >= n)
+							reserve(this->_size * 2);
+						else
+							reserve(n);
+					}
+				}
+				for (size_type i = this->_size; i < n; ++i)
+					this->_alloc.construct(&this->_array[i], val);
+				this->_size = n;
+			}
+			return ;
+		}
+
 		size_type		capacity(void) const {return (this->_capacity);}
 
 		bool			empty(void) const
@@ -107,6 +136,28 @@ namespace ft
 				return (true);
 			else
 				return (false);
+		}
+
+		void			reserve(size_type n)
+		{
+			if (n > this->max_size())
+			{
+				if (n > this->max_size())
+				throw std::length_error("vector::reserve");
+			}
+			if (n > this->_capacity)
+			{
+				value_type *new_array = _alloc.allocate(n);
+				for (size_type i = 0; i < this->_size; ++i)
+				{
+					this->_alloc.construct(&new_array[i], this->_array[i]);
+					this->_alloc.destroy(&this->_array[i]);
+				}
+				this->_alloc.deallocate(this->_array, this->_capacity);
+				this->_capacity = n;
+				this->_array = new_array;
+			}
+			return ;
 		}
 
 		reference		operator[](size_type n)
@@ -161,105 +212,6 @@ namespace ft
 			return (r);
 		}
 
-		allocator_type	get_allocator(void) const
-		{
-			allocator_type cpy_allocator(_alloc);
-			return (cpy_allocator);
-		}
-
-		void			reserve(size_type n)
-		{
-			if (n > this->max_size())
-			{
-				if (n > this->max_size())
-				throw std::length_error("vector::reserve");
-			}
-			if (n > this->_capacity)
-			{
-				value_type *new_array = _alloc.allocate(n);
-				for (size_type i = 0; i < this->_size; ++i)
-				{
-					this->_alloc.construct(&new_array[i], this->_array[i]);
-					this->_alloc.destroy(&this->_array[i]);
-				}
-				this->_alloc.deallocate(this->_array, this->_capacity);
-				this->_capacity = n;
-				this->_array = new_array;
-			}
-			return ;
-		}
-
-		void			resize(size_type n, value_type val = value_type())
-		{
-			if (n < this->_size)
-			{
-				for (size_type i = n; i < this->_size; ++i)
-					this->_alloc.destroy(&this->_array[i]);
-				this->_size = n;
-			}
-			else if (n > this->_size)
-			{
-				if (n > this->_capacity)
-				{
-					if (this->_capacity == 0)
-						reserve(n);
-					else
-					{
-						if (this->_size * 2 >= n)
-							reserve(this->_size * 2);
-						else
-							reserve(n);
-					}
-				}
-				for (size_type i = this->_size; i < n; ++i)
-					this->_alloc.construct(&this->_array[i], val);
-				this->_size = n;
-			}
-			return ;
-		}
-
-		void			push_back(const value_type &val)
-		{
-			if (this->_size + 1 > this->_capacity)
-			{
-				if (this->_capacity == 0)
-					reserve(1);
-				else
-					reserve(this->_capacity * 2);
-			}
-			this->_alloc.construct(&this->_array[_size], val);
-			this->_size++;
-			return ;
-		}
-
-		void			pop_back(void)
-		{
-			this->_alloc.destroy(&this->_array[this->_size - 1]);
-			this->_size--;
-			return ;
-		}
-
-		void			clear(void)
-		{
-			while (this->_size > 0)
-				pop_back();
-			return ;
-		}
-
-		void			swap(vector &x)
-		{
-			value_type	*tmp_array = this->_array;
-			size_type	tmp_capacity = this->_capacity;
-			size_type	tmp_size = this->_size;
-			this->_array = x._array;
-			this->_capacity = x._capacity;
-			this->_size = x._size;
-			x._array = tmp_array;
-			x._capacity = tmp_capacity;
-			x._size = tmp_size;
-			return ;
-		}
-
 		template <class InputIterator>
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, void>::type
 		assign(InputIterator first, InputIterator last)
@@ -293,30 +245,25 @@ namespace ft
 			return ;
 		}
 
-		iterator	erase(iterator pos) {return (this->erase(pos, ++pos));}
-
-		iterator	erase(iterator first, iterator last)
+		void			push_back(const value_type &val)
 		{
-			iterator	tmp;
+			if (this->_size + 1 > this->_capacity)
+			{
+				if (this->_capacity == 0)
+					reserve(1);
+				else
+					reserve(this->_capacity * 2);
+			}
+			this->_alloc.construct(&this->_array[_size], val);
+			this->_size++;
+			return ;
+		}
 
-			if (first == last)
-				return (last);
-			tmp = first;
-			this->_size -= last- first;
-			while (tmp != last)
-			{
-				this->_alloc.destroy(&*(tmp));
-				tmp++;
-			}
-			tmp = first;
-			while (tmp != this->end())
-			{
-				this->_alloc.construct(&*(tmp), *(last));
-				this->_alloc.destroy(&*(last));
-				tmp++;
-				last++;
-			}
-			return (first);
+		void			pop_back(void)
+		{
+			this->_alloc.destroy(&this->_array[this->_size - 1]);
+			this->_size--;
+			return ;
 		}
 
 		iterator	insert(iterator position, const value_type &val)
@@ -389,6 +336,59 @@ namespace ft
 			for (; first != last; ++first, ++position)
 				insert(position, *first);
 			return ;
+		}
+
+		iterator	erase(iterator pos) {return (this->erase(pos, ++pos));}
+
+		iterator	erase(iterator first, iterator last)
+		{
+			iterator	tmp;
+
+			if (first == last)
+				return (last);
+			tmp = first;
+			this->_size -= last- first;
+			while (tmp != last)
+			{
+				this->_alloc.destroy(&*(tmp));
+				tmp++;
+			}
+			tmp = first;
+			while (tmp != this->end())
+			{
+				this->_alloc.construct(&*(tmp), *(last));
+				this->_alloc.destroy(&*(last));
+				tmp++;
+				last++;
+			}
+			return (first);
+		}
+
+		void			swap(vector &x)
+		{
+			value_type	*tmp_array = this->_array;
+			size_type	tmp_capacity = this->_capacity;
+			size_type	tmp_size = this->_size;
+			this->_array = x._array;
+			this->_capacity = x._capacity;
+			this->_size = x._size;
+			x._array = tmp_array;
+			x._capacity = tmp_capacity;
+			x._size = tmp_size;
+			return ;
+		}
+
+		void			clear(void)
+		{
+			while (this->_size > 0)
+				pop_back();
+			return ;
+		}
+
+		allocator_type	get_allocator(void) const
+		{
+			allocator_type cpy_allocator(_alloc);
+			return (cpy_allocator);
 		}
 	};
 
