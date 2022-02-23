@@ -2,12 +2,7 @@
 
 #iterators_traits, reverse_iterator, enable_if, is_integral, equal/lexicographical compare, std : :pair, std : :make_pair
 
-# TODO map
-
-TODO Fix format in existing files!
-TODO Fix typedef in vector & check in the other files if needed too!
-TODO move private funcs to private
-TODO erase stuff in utils for pair
+#map
 
 #Member functions
 
