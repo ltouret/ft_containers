@@ -203,7 +203,7 @@ int main() {
   		myvector.resize(12);
 
   		std::cout << "myvector contains:";
-  		for (uint i=0;i<myvector.size();i++)
+  		for (unsigned long i=0;i<myvector.size();i++)
     		std::cout << ' ' << myvector[i];
   		std::cout << '\n';
 	}
@@ -381,7 +381,7 @@ int main() {
   		myvector.push_back (42);
 
   		std::cout << "myvector stores " << int(myvector.size()) << " numbers: ";
-  		for (uint i = 0; i < myvector.size(); i++)
+  		for (unsigned long i = 0; i < myvector.size(); i++)
       		std::cout << myvector[i] << " ";
   		std::cout << std::endl;
 	}

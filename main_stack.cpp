@@ -25,8 +25,8 @@ int main() {
         std::vector<int> myvector (2,200);        // vector with 2 elements
         stack<int> first;                    // empty stack
         stack<int, std::deque<int> > second (mydeque);         // stack initialized to copy of deque
-        stack<int,std::vector<int> > third;  // empty stack using vector
-        stack<int,std::vector<int> > fourth (myvector);
+        stack<int, std::vector<int> > third;  // empty stack using vector
+        stack<int, std::vector<int> > fourth (myvector);
         std::cout << "size of first: " << first.size() << '\n';
         std::cout << "size of second: " << second.size() << '\n';
         std::cout << "size of third: " << third.size() << '\n';
