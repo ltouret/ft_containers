@@ -5,7 +5,6 @@ vector
 check*/
 *.html
 *.swp
-*.pdf
 test.cpp
 test
 
