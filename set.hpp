@@ -138,14 +138,14 @@ namespace ft
 			}
 			else
 			{
-				map_node	*temp = search(val.first);
+				map_node	*temp = search(val);
 
-				if (!_compare(val.first, temp->value.first) && !_compare(temp->value.first, val.first))
+				if (!_compare(val, temp->value) && !_compare(temp->value, val))
 					return (ft::make_pair(iterator(temp, _end), false));
 
 				newmap_node = new_node(val, temp);
 
-				if (_compare(val.first, temp->value.first))
+				if (_compare(val, temp->value))
 					temp->left = newmap_node;
 				else
 					temp->right = newmap_node;
@@ -626,14 +626,14 @@ namespace ft
 
 			while (temp != NULL)
 			{
-				if (_compare(key, temp->value.first))
+				if (_compare(key, temp->value))
 				{
 					if (temp->left == NULL)
 						break;
 					else
 						temp = temp->left;
 				}
-				else if (!_compare(key, temp->value.first) && !_compare(temp->value.first, key))
+				else if (!_compare(key, temp->value) && !_compare(temp->value, key))
 					break;
 				else
 				{
