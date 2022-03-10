@@ -90,7 +90,7 @@ namespace ft
 
 			protected:
 
-			Compare comp;
+			Compare			comp;
 			value_compare	(Compare c) : comp(c) {};
 
 			public:

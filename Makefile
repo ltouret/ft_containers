@@ -6,7 +6,7 @@
 #    By: ltouret <ltouret@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/07 23:08:32 by ltouret           #+#    #+#              #
-#    Updated: 2022/03/07 23:08:52 by ltouret          ###   ########.fr        #
+#    Updated: 2022/03/10 17:27:35 by ltouret          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ fclean:			clean
 
 re:				fclean all
 
-.PHONY:			all clean fclean re test ft std
+.PHONY:			all clean fclean re test ft std vector map stack set
 
 %.o: %.cpp $(INCLUDES)
 	@$(CXX) $(CFLAGS) -c $< -o $@

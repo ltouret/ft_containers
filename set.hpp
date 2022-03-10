@@ -1,5 +1,5 @@
-#ifndef MAP_HPP
-# define MAP_HPP
+#ifndef SET_HPP
+# define SET_HPP
 
 #include <iostream>
 #include "utils.hpp"
@@ -23,7 +23,7 @@ namespace ft
 		typedef typename allocator_type::const_reference							const_reference;
 		typedef typename allocator_type::pointer									pointer;
 		typedef typename allocator_type::const_pointer								const_pointer;
-		typedef ft::bidirectional_iterator<value_type>								iterator;
+		typedef ft::const_bidirectional_iterator<value_type>						iterator;
 		typedef ft::const_bidirectional_iterator<value_type>						const_iterator;
 		typedef ft::reverse_iterator<iterator>										reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>								const_reverse_iterator;
@@ -174,7 +174,7 @@ namespace ft
 
 		void		erase(iterator position)
 		{
-			erase(position->first);
+			erase(*position);
 		}
 
 		size_type	erase(const key_type &key)
@@ -184,7 +184,7 @@ namespace ft
 
 			map_node	*v = search(key);
 
-			if (!_compare(key, v->value.first) && !_compare(v->value.first, key))
+			if (!_compare(key, v->value) && !_compare(v->value, key))
 			{
 				deletemap_node(v);
 				_end->parent = _end->maximum(_root);
@@ -209,7 +209,7 @@ namespace ft
 			{
 				tmp = (first);
 				++first;
-				key = first->first;
+				key = *first;
 				erase(tmp);
 				first = find(key);
 			}
@@ -244,7 +244,7 @@ namespace ft
 		{
 			for (iterator it = this->begin(); it != this->end(); ++it)
 			{
-				if (!_compare(k, it->first) && !_compare(it->first, k))
+				if (!_compare(k, *it) && !_compare(*it, k))
 					return (it);
 			}
 			return (this->end());
@@ -254,7 +254,7 @@ namespace ft
 		{
 			for (const_iterator it = this->begin(); it != this->end(); ++it)
 			{
-				if (!_compare(k, it->first) && !_compare(it->first, k))
+				if (!_compare(k, *it) && !_compare(*it, k))
 					return (it);
 			}
 			return (this->end());
@@ -271,7 +271,7 @@ namespace ft
 		{
 			for (iterator it = this->begin(); it != this->end(); ++it)
 			{
-				if (!_compare(it->first, k))
+				if (!_compare(*it, k))
 					return (it);
 			}
 			return (this->end());
@@ -281,7 +281,7 @@ namespace ft
 		{
 			for (const_iterator it = this->begin(); it != this->end(); ++it)
 			{
-				if (!_compare(it->first, k))
+				if (!_compare(*it, k))
 					return (it);
 			}
 			return (this->end());
@@ -291,7 +291,7 @@ namespace ft
 		{
 			for (iterator it = this->begin(); it != this->end(); ++it)
 			{
-				if (_compare(k, it->first))
+				if (_compare(k, *it))
 					return (it);
 			}
 			return (this->end());
@@ -301,7 +301,7 @@ namespace ft
 		{
 			for (const_iterator it = this->begin(); it != this->end(); ++it)
 			{
-				if (_compare(k, it->first))
+				if (_compare(k, *it))
 					return (it);
 			}
 			return (this->end());
