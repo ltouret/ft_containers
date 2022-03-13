@@ -15,7 +15,6 @@ namespace ft
 		public:
 		typedef Key																	key_type;
 		typedef Key									 								value_type;
-		// try compare like this?
 		typedef Compare																key_compare;
 		typedef Compare																value_compare;
 		typedef Alloc																allocator_type;

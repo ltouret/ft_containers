@@ -6,7 +6,7 @@
 #    By: ltouret <ltouret@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/07 23:08:32 by ltouret           #+#    #+#              #
-#    Updated: 2022/03/10 17:27:35 by ltouret          ###   ########.fr        #
+#    Updated: 2022/03/13 23:42:24 by ltouret          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,10 @@ MAP		=		ft_map
 MAP2	=		std_map
 STACK	=		ft_stack
 STACK2	=		std_stack
+SET		=		ft_set
+SET2	=		std_set
 
-ALL	=	$(VECTOR) $(VECTOR2) $(MAP) $(MAP2) $(STACK) $(STACK2)
+ALL	=	$(VECTOR) $(VECTOR2) $(MAP) $(MAP2) $(STACK) $(STACK2) $(SET) $(SET2)
 
 RM = 	rm -rf
 
@@ -27,18 +29,20 @@ CFLAGS =	-Wall -Werror -Wextra -std=c++98 #-fsanitize=address -g3
 V_SRCS =		main_vector.cpp
 M_SRCS =		main_map.cpp
 S_SRCS =		main_stack.cpp
+ST_SRCS =		main_set.cpp
 
-INCLUDES =		vector.hpp map.hpp stack.hpp
+INCLUDES =		vector.hpp map.hpp stack.hpp set.hpp
 
 V_OBJS =		$(V_SRCS:%.cpp=%.o)
 M_OBJS =		$(M_SRCS:%.cpp=%.o)
 S_OBJS =		$(S_SRCS:%.cpp=%.o)
+ST_OBJS =		$(ST_SRCS:%.cpp=%.o)
 
 
-all: 			ft_vector ft_map ft_stack
+all: 			ft_vector ft_map ft_stack ft_set
 
 clean:
-				$(RM) $(V_OBJS) $(M_OBJS) $(S_OBJS)
+				$(RM) $(V_OBJS) $(M_OBJS) $(S_OBJS) $(ST_OBJS)
 				$(RM) *ft *std 
 
 fclean:			clean
@@ -95,3 +99,18 @@ stack:
 	@make -s std_stack
 	./$(STACK2) > sstd
 	diff -s sft sstd
+
+ft_set: $(ST_OBJS)
+	$(CXX) $(CFLAGS) -D FT $? -o $(SET)
+
+std_set: $(ST_SRCS)
+	$(CXX) $(CFLAGS) -D STD $? -o $(SET2)
+
+set:
+	@$(RM) $(SET)
+	@$(RM) $(SET2)
+	@make -s ft_set
+	./$(SET) > stft
+	@make -s std_set
+	./$(SET2) > ststd
+	diff -s stft ststd

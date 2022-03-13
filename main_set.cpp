@@ -114,35 +114,33 @@ int     main()
         for (set<char>::iterator it=myset.begin(); it!=myset.end(); ++it)
             std::cout << *it << '\n';
     }
-}
-	/*
     std::cout << "...............Swap.................." << std::endl << std::endl;
     {
-        set<char,int> foo,bar;
-        foo['x']=100;
-        foo['y']=200;
-        bar['a']=11;
-        bar['b']=22;
-        bar['c']=33;
+        set<char> foo,bar;
+        foo.insert('x');
+        foo.insert('y');
+        bar.insert('a');
+        bar.insert('b');
+        bar.insert('c');
         foo.swap(bar);
         std::cout << "foo contains:\n";
-        for (set<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
-            std::cout << it->first << " => " << it->second << '\n';
+        for (set<char>::iterator it=foo.begin(); it!=foo.end(); ++it)
+            std::cout << *it << '\n';
         std::cout << "bar contains:\n";
-        for (set<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
-            std::cout << it->first << " => " << it->second << '\n';
+        for (set<char>::iterator it=bar.begin(); it!=bar.end(); ++it)
+            std::cout << *it << '\n';
     }
     std::cout << "...............Erase................." << std::endl << std::endl;
     {
-        set<char,int> myset;
-        set<char,int>::iterator it;
+        set<char> myset;
+        set<char>::iterator it;
         // insert some values:
-        myset['a']=10;
-        myset['b']=20;
-        myset['c']=30;
-        myset['d']=40;
-        myset['e']=50;
-        myset['f']=60;
+        myset.insert('a');
+        myset.insert('b');
+        myset.insert('c');
+        myset.insert('d');
+        myset.insert('e');
+        myset.insert('f');
         it=myset.find('b');
         myset.erase (it);                   // erasing by iterator
         myset.erase ('c');                  // erasing by key
@@ -150,122 +148,110 @@ int     main()
         myset.erase ( it, myset.end() );    // erasing by range
         // show content:
         for (it=myset.begin(); it!=myset.end(); ++it)
-            std::cout << it->first << " => " << it->second << '\n';
+            std::cout << *it << '\n';
     }
     std::cout << "..............Insert................." << std::endl << std::endl;
     {
-        set<char,int> myset;
+        set<char> myset;
         // first insert function version (single parameter):
-        myset.insert ( pair<char,int>('a',100) );
-        myset.insert ( pair<char,int>('z',200) );
-        pair<set<char,int>::iterator,bool> ret;
-        ret = myset.insert ( pair<char,int>('z',500) );
+        myset.insert('a');
+        myset.insert('z');
+        pair<set<char>::iterator,bool> ret;
+        ret = myset.insert('z');
         if (ret.second==false) {
             std::cout << "element 'z' already existed";
-            std::cout << " with a value of " << ret.first->second << '\n';
+            std::cout << " with a value of " << *ret.first<< '\n';
         }
         // second insert function version (with hint position):
-        set<char,int>::iterator it = myset.begin();
-        myset.insert (it, pair<char,int>('b',300));  // max efficiency inserting
-        myset.insert (it, pair<char,int>('c',400));  // no max efficiency inserting
+        set<char>::iterator it = myset.begin();
+        myset.insert (it, 'b');
+        myset.insert (it, 'c');
         // third insert function version (range insertion):
-        set<char,int> anotherset;
+        set<char> anotherset;
         anotherset.insert(myset.begin(),myset.find('c'));
         // showing contents:
         std::cout << "myset contains:\n";
         for (it=myset.begin(); it!=myset.end(); ++it)
-            std::cout << it->first << " => " << it->second << '\n';
+            std::cout << *it<< '\n' ;
         std::cout << "anotherset contains:\n";
         for (it=anotherset.begin(); it!=anotherset.end(); ++it)
-            std::cout << it->first << " => " << it->second << '\n';
-    }
-    std::cout << ".............Operator[].............." << std::endl << std::endl;
-    {
-        set<char,std::string> myset;
-        myset['a']="an element";
-        myset['b']="another element";
-        myset['c']=myset['b'];
-        std::cout << "myset['a'] is " << myset['a'] << '\n';
-        std::cout << "myset['b'] is " << myset['b'] << '\n';
-        std::cout << "myset['c'] is " << myset['c'] << '\n';
-        std::cout << "myset['d'] is " << myset['d'] << '\n';
-        std::cout << "myset now contains " << myset.size() << " elements.\n";
+            std::cout << *it<< '\n' ;
     }
     std::cout << "..............Max_Size..............." << std::endl << std::endl;
     {
         int i;
-        set<int,int> myset;
+        set<int> myset;
         if (myset.max_size()>1000)
         {
-            for (i=0; i<1000; i++) myset[i]=0;
+            for (i=0; i<1000; i++) myset.insert(i);
             std::cout << "The set contains 1000 elements.\n";
         }
         else std::cout << "The set could not hold 1000 elements.\n";
     }
     std::cout << "...............Size.................." << std::endl << std::endl;
     {
-        set<char,int> myset;
-        myset['a']=101;
-        myset['b']=202;
-        myset['c']=302;
+        set<char> myset;
+        myset.insert('a');
+        myset.insert('b');
+        myset.insert('c');
         std::cout << "myset.size() is " << myset.size() << '\n';
     }
     std::cout << "............Empty....................." << std::endl << std::endl;
     {
-        set<char,int> myset;
-        myset['a']=10;
-        myset['b']=20;
-        myset['c']=30;
+        set<char> myset;
+        myset.insert('a');
+        myset.insert('b');
+        myset.insert('c');
         while (!myset.empty())
         {
-            std::cout << myset.begin()->first << " => " << myset.begin()->second << '\n';
+            std::cout << *myset.begin() << '\n'; 
             myset.erase(myset.begin());
         }
     }
     std::cout << "..........Reverse Iterators..........." << std::endl << std::endl;
     {
-        set<char,int> myset;
-        myset['x'] = 100;
-        myset['y'] = 200;
-        myset['z'] = 300;
+        set<char> myset;
+        myset.insert('x');
+        myset.insert('y');
+        myset.insert('z');
         // show content:
-        set<char,int>::reverse_iterator rit;
+        set<char>::reverse_iterator rit;
         for (rit=myset.rbegin(); rit!=myset.rend(); ++rit)
-            std::cout << rit->first << " => " << rit->second << '\n';
+            std::cout << *rit << '\n';
     }
     std::cout << "..............Iterators..............." << std::endl << std::endl;
     {
-        set<char,int> myset;
-        myset['b'] = 100;
-        myset['a'] = 200;
-        myset['c'] = 300;
+        set<char> myset;
+        myset.insert('b');
+        myset.insert('a');
+        myset.insert('c');
         // show content:
         for (set<char,int>::iterator it=myset.begin(); it!=myset.end(); ++it)
-            std::cout << it->first << " => " << it->second << '\n';
+            std::cout << *it << '\n';
     }
     std::cout << "............Operator=............" << std::endl << std::endl;
     {
-        set<char,int> first;
-        set<char,int> second;
-        first['x']=8;
-        first['y']=16;
-        first['z']=32;
+        set<char> first;
+        set<char> second;
+        first.insert('x');
+        first.insert('y');
+        first.insert('z');
         second=first;                // second now contains 3 ints
-        first=set<char,int>();  // and first is now empty
+        first=set<char>();  // and first is now empty
         std::cout << "Size of first: " << first.size() << '\n';
         std::cout << "Size of second: " << second.size() << '\n';
     }
     std::cout << "...........Erase..........." << std::endl << std::endl;
     {
-        set<char,int> myset;
-        set<char,int>::iterator it;
+        set<char> myset;
+        set<char>::iterator it;
         // insert some values:
-        myset['a']=10;
-        myset['b']=20;
-        myset['c']=30;
-        myset['d']=40;
-        myset['e']=50;
-        myset['f']=60;
+        myset.insert('a');
+        myset.insert('b');
+        myset.insert('c');
+        myset.insert('d');
+        myset.insert('e');
+        myset.insert('f');
         it=myset.find('b');
         myset.erase (it);                   // erasing by iterator
         myset.erase ('c');                  // erasing by key
@@ -273,36 +259,35 @@ int     main()
         myset.erase ( it, myset.end() );    // erasing by range
         // show content:
         for (it=myset.begin(); it!=myset.end(); ++it)
-            std::cout << it->first << " => " << it->second << '\n';
+            std::cout << *it << '\n';
     }
     std::cout << "..........Upper_bound and Lower_bound.........." << std::endl << std::endl;
     {
-        set<char,int> myset;
-        set<char,int>::iterator itlow,itup;
-        myset['a']=20;
-        myset['b']=40;
-        myset['c']=60;
-        myset['d']=80;
-        myset['e']=100;
+        set<char> myset;
+        set<char>::iterator itlow,itup;
+        myset.insert('a');
+        myset.insert('b');
+        myset.insert('c');
+        myset.insert('d');
+        myset.insert('e');
         itlow = myset.lower_bound ('b');  // itlow points to b
         itup = myset.upper_bound ('d');   // itup points to e (not d!)
         myset.erase(itlow,itup);        // erases [itlow,itup)
         // print content:
         for (set<char,int>::iterator it=myset.begin(); it!=myset.end(); ++it)
-            std::cout << it->first << " => " << it->second << '\n';
+            std::cout << *it << '\n';
     }
     std::cout << "..............Equal_range............" << std::endl << std::endl;
     {
-        set<char,int> myset;
-        myset['a']=10;
-        myset['b']=20;
-        myset['c']=30;
-        pair<set<char,int>::iterator,set<char,int>::iterator> ret;
+        set<char> myset;
+        myset.insert('a');
+        myset.insert('b');
+        myset.insert('c');
+        pair<set<char>::iterator,set<char>::iterator> ret;
         ret = myset.equal_range('b');
         std::cout << "lower bound points to: ";
-        std::cout << ret.first->first << " => " << ret.first->second << '\n';
+        std::cout << *ret.first << '\n';
         std::cout << "upper bound points to: ";
-        std::cout << ret.second->first << " => " << ret.second->second << '\n';
+        std::cout << *ret.second << '\n';
     }
 }
-*/
